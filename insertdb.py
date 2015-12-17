@@ -259,11 +259,11 @@ class DB_Dialog(QtGui.QDialog):
     def accept(self):
         db_path = ''
         if sys.platform == 'darwin':
-            db_path = "db/fytt2_db.sqlite3"
+            db_path = "db/fytt_db.sqlite3"
         elif sys.platform == 'linux2' or sys.platform == 'linux':
-            db_path = "fytt2_db.sqlite3"
+            db_path = "fytt_db.sqlite3"
         elif sys.platform == 'win32':
-            db_path = "fytt2_db.sqlite3"
+            db_path = "fytt_db.sqlite3"
         # db_path = "fytt2_db.sqlite3"
         db_handle = lite.connect(db_path, isolation_level=None)
         db_cursor = db_handle.cursor()

@@ -53,11 +53,11 @@ class BasisGui(QtGui.QDialog):
         QtGui.QMainWindow.__init__(self)
         self.setupUi(self)
         if sys.platform == 'darwin':
-            self.db_path = "db/fytt2_db.sqlite3"
+            self.db_path = "db/fytt_db.sqlite3"
         elif sys.platform == 'linux2' or sys.platform == 'linux':
-             self.db_path = "fytt2_db.sqlite3"
+             self.db_path = "fytt_db.sqlite3"
         elif sys.platform == 'win32':
-             self.db_path = "fytt2_db.sqlite3"
+             self.db_path = "fytt_db.sqlite3"
         
         self.db_handle = lite.connect(self.db_path, isolation_level=None)
         self.db_cursor = self.db_handle.cursor()
