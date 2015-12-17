@@ -6,7 +6,7 @@ python setup.py build_ext --inplace
 
 then...
 
-py2app/py2exe build script for Fytt2.
+py2app/py2exe build script for Fytt.
 
 Will automatically ensure that all build prerequisites are available
 via ez_setup
@@ -18,7 +18,7 @@ Usage (Windows):
    python setup.py py2exe
 
 Usage (Linux):
-pyinstaller -y -F fytt2.py -n Fytt -i Icon.ico (use dev version 2.1-dev from https://github.com/pyinstaller/pyinstaller)
+pyinstaller -y -F fytt.py -n Fytt -i Icon.ico (use dev version 2.1-dev from https://github.com/pyinstaller/pyinstaller)
 """
 import os
 import sys
@@ -42,12 +42,12 @@ elif sys.platform == 'win32':
 #   ext_modules=ext_modules,
 # )
 
-APP = ['fytt2.py']
-DATA_FILES = [('images', ['fytt-icon.png']), ('db', ['fytt2_db.sqlite3'])]
+APP = ['fytt.py']
+DATA_FILES = [('images', ['fytt-icon.png']), ('db', ['fytt_db.sqlite3'])]
 OPTIONS = {'argv_emulation': False,
            'iconfile' : 'Icon.icns',
            'plist': {'CFBundleGetInfoString': 'Fytt: Spectral decomposition by linear least squares fitting',
-                     'CFBundleIdentifier': 'edu.uiowa.vkrishnamani.fytt2',
+                     'CFBundleIdentifier': 'edu.uiowa.vkrishnamani.fytt',
                      'CFBundleShortVersionString': '2.6',
                      'CFBundleName': 'Fytt',
                      'CFBundleVersion': '26',
@@ -70,7 +70,7 @@ if sys.platform == 'darwin':
   )
 elif sys.platform == 'win32':
   setup(
-    windows=[{"script":'fytt2.py',
+    windows=[{"script":'fytt.py',
                "icon_resources": [(1, "Icon.ico")],
                "dest_base":"Fytt"
             }],
