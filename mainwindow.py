@@ -180,7 +180,13 @@ class Fytt_MainWindow(QtGui.QMainWindow):
     @QtCore.pyqtSlot()
     def plot_graph_dictionary(self, dictionary, params, name, plot, widget):
         plot.clear()
-        return widget.plot(list(dictionary.keys()), list(dictionary.values()), pen=params, antialias=True)
+        xvalues = []
+        yvalues = []
+        for key in sorted(dictionary.keys()):
+            xvalues.append(key)
+            yvalues.append(dictionary[key])
+        return widget.plot(xvalues, yvalues, pen=params, antialias=True)
+        # return widget.plot(list(dictionary.keys()), list(dictionary.values()), pen=params, antialias=True)
 
     def setFretValue(self):
         self.fret_lbl.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">%0.3f</span></p></body></html>" % self.spectra.fret,  None))

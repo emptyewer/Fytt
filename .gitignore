@@ -1,0 +1,14 @@
+dist
+build
+*.pyc
+_fytt_params.dat
+_spectra.dat
+basis_sets/Fitting Cy3:Cy5 pH 4.5/
+batch_fytt_input.txt
+db/Untitled.csv
+db/create_database.py
+db/filtertable.py
+db/spectra_attributes.csv
+db/spectra_items.csv
+db/spectra_spectra.csv
+db/utzinger_spectra.sql

@@ -248,6 +248,11 @@ class BasisGui(QtGui.QDialog):
         self.mainWindow.spectra.cy5FileName = self.basis_sets.acceptorName
         (self.mainWindow.spectra.cy5_basis_scaled, self.mainWindow.spectra.cy5_scaleFactor) = self.mainWindow.spectra.rescale_basis(self.mainWindow.spectra.reference, self.mainWindow.spectra.cy5_basis, self.mainWindow.spectra.getX_forYmax(self.mainWindow.spectra.cy5_basis))
         self.mainWindow.load_cy5(load=0)
+        
+        if len(self.basis_sets.background['y']) == 0 and len(self.basis_sets.background['x']) == 0:
+            self.basis_sets.background['x'] = self.basis_sets.donorEmission['x']
+            self.basis_sets.background['y'] = [0.0001] * len(self.basis_sets.donorEmission['x'])
+
         self.mainWindow.spectra.bkg_basis = self.basis_sets.background
         self.mainWindow.spectra.bkgFileName = self.basis_sets.backgroundName
         (self.mainWindow.spectra.bkg_basis_scaled, self.mainWindow.spectra.bkg_scaleFactor) = self.mainWindow.spectra.rescale_basis(self.mainWindow.spectra.reference, self.mainWindow.spectra.bkg_basis, self.mainWindow.spectra.getX_forYmax(self.mainWindow.spectra.bkg_basis))
@@ -306,7 +311,6 @@ class BasisGui(QtGui.QDialog):
         self.db_handle.commit()
 
     def loadSpectraIntoDatabase(self, className):
-        print "Loading Spectra Into Database"
         db_dialog = DB_Dialog(className)
         returnVal = db_dialog.exec_()
         self.setupBasisSets()

@@ -106,12 +106,14 @@ class Spectra():
         :param highSel:self.highSelection
         :return:NULL
         """
-        lowDiffList = list(map(lambda x: int(x - lowSel), self.reference.keys()))
-        highDiffList = list(map(lambda x: int(x - highSel), self.reference.keys()))
+        lowDiffList = list(map(lambda x: int(x - lowSel), sorted(self.reference.keys())))
+        highDiffList = list(map(lambda x: int(x - highSel), sorted(self.reference.keys())))
+
         try:
             self.lowestSelectionIndex = lowDiffList.index(0)
         except ValueError:
             pass
+        
         try:
             self.highSelectionIndex = highDiffList.index(0)
         except ValueError:
