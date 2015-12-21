@@ -3,86 +3,28 @@
 # Fytt2
 Fit spectra by linear combination of its component spectra.
 
+
+```Shell
+https://github.com/emptyewer/Fytt/releases/tag/2.6
+```
+
 #Mac OS X
 
 ```Shell
-Open Fytt2.dmg under 'apps' folder and copy Fytt2.app to your Applications folder
+Open Fytt_OSX_x64.dmg and copy Fytt.app to Applications Folder
 ```
 
 #Windows
 
 ```Shell
-Open Fytt2Setup.exe under 'apps' folder to install Fytt2
+Open Fytt_2.6_Win32_x86.exe to install
 ```
 
 #Linux
 ```Shell
-Use Fytt2_2.6_amd64.deb to install Fytt2
+Untar fytt_linux_x64.tar.bz2
 ```
 
-#Install from Source Instructions
-#Dependencies - Mac OS X
-
-If homebrew is not already installed in your system
-```Shell
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-```Shell
-brew install sip --with-python3
-```
-
-```Shell
-brew install pyqt --with-python3
-```
-
-```Shell
-pip3 install pyqtgraph
-```
-
-```Shell
-pip3 install scipy
-```
-
-#Dependencies - Linux
-
-```Shell
-pip install PyQt4
-```
-
-```Shell
-pip install pyqtgraph
-```
-
-```Shell
-pip install scipy
-```
-
-or 
-
-```Shell
-pip3 install PyQt4
-```
-
-```Shell
-pip3 install pyqtgraph
-```
-
-```Shell
-pip3 install scipy
-```
-
-#Command Line
-
-```Shell
-python fytt2.py
-```
-
-or
-
-```Shell
-python3 fytt2.py
-```
 #Screenshot (Version 2.6)
 
 ![alt tag](https://github.com/emptyewer/Fytt2/blob/development/screenshot.png)
