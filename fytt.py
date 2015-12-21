@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Venky Krishnamani'
-__version__ = 2.5
+__version__ = 2.6
 
 # The MIT License (MIT)
 #
