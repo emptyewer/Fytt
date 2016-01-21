@@ -62,14 +62,14 @@ class BasisGui(QtGui.QDialog):
         self.db_handle = lite.connect(self.db_path, isolation_level=None)
         self.db_cursor = self.db_handle.cursor()
         self.setupBasisSets()
-        self.setupLamps()
+        # self.setupLamps()
         self.donorSelection = []
         self.acceptorSelection = []
         self.backgroundSelection = []
         self.lampSelection = 0
         self.basis_sets = Basis()
-        self.donorExPlot = pg.PlotDataItem()
-        self.acceptorExPlot = pg.PlotDataItem()
+        # self.donorExPlot = pg.PlotDataItem()
+        # self.acceptorExPlot = pg.PlotDataItem()
         self.donorEmPlot = pg.PlotDataItem()
         self.acceptorEmPlot = pg.PlotDataItem()
         self.backgroundPlot = pg.PlotDataItem()
@@ -139,47 +139,47 @@ class BasisGui(QtGui.QDialog):
         self.backgroundSelectionModel = self.background_list.selectionModel()
         self.connect(self.backgroundSelectionModel, QtCore.SIGNAL("selectionChanged(QItemSelection, QItemSelection)"), self.backgroundSelected)
 
-    def setupLamps(self):
-        self.db_cursor.execute("SELECT * FROM lamps")
-        self.lamp_data = []
-        self.lamp_data = self.db_cursor.fetchall()
-        self.lamp_box.clear()
-        for row in self.lamp_data:
-            self.lamp_box.addItem("{0}".format(row[1]))
-        self.lamp_box.currentIndexChanged.connect(self.lampselectionChanged)
+    # def setupLamps(self):
+    #     self.db_cursor.execute("SELECT * FROM lamps")
+    #     self.lamp_data = []
+    #     self.lamp_data = self.db_cursor.fetchall()
+    #     self.lamp_box.clear()
+    #     for row in self.lamp_data:
+    #         self.lamp_box.addItem("{0}".format(row[1]))
+    #     self.lamp_box.currentIndexChanged.connect(self.lampselectionChanged)
+    #
+    # def lampselectionChanged(self, index):
+    #     self.lampSelection = index
+    #     self.basis_sets.lamp['x'] = pickle.loads(str(self.lamp_data[index][2]))
+    #     self.basis_sets.lamp['y'] = pickle.loads(str(self.lamp_data[index][3]))
+    #     self.calculateLampIntRatio()
 
-    def lampselectionChanged(self, index):
-        self.lampSelection = index
-        self.basis_sets.lamp['x'] = pickle.loads(str(self.lamp_data[index][2]))
-        self.basis_sets.lamp['y'] = pickle.loads(str(self.lamp_data[index][3]))
-        self.calculateLampIntRatio()
-
-    def calculateLampIntRatio(self):
-        if len(self.basis_sets.lamp['x']) > 0 and self.donorExcitation_spin.value() > 1.0 and self.acceptorExcitation_spin.value() > 1.0:
-            left = self.slitWidth_spin.value()/2 * -1
-            right = self.slitWidth_spin.value()/2
-            valueAtDonorEx = interpolation.get_interpolated_val(self.basis_sets.lamp, self.donorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.donorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.donorExcitation_spin.value() + right)
-            valueAtAcceptorEx = interpolation.get_interpolated_val(self.basis_sets.lamp, self.acceptorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.acceptorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.acceptorExcitation_spin.value() + right)
-            self.basis_sets.lampIntensityRatio = valueAtDonorEx/valueAtAcceptorEx
-            self.calculateDirectExcitation()
+    # def calculateLampIntRatio(self):
+    #     if len(self.basis_sets.lamp['x']) > 0 and self.donorExcitation_spin.value() > 1.0 and self.acceptorExcitation_spin.value() > 1.0:
+    #         left = self.slitWidth_spin.value()/2 * -1
+    #         right = self.slitWidth_spin.value()/2
+    #         valueAtDonorEx = interpolation.get_interpolated_val(self.basis_sets.lamp, self.donorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.donorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.donorExcitation_spin.value() + right)
+    #         valueAtAcceptorEx = interpolation.get_interpolated_val(self.basis_sets.lamp, self.acceptorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.acceptorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.lamp, self.acceptorExcitation_spin.value() + right)
+    #         self.basis_sets.lampIntensityRatio = valueAtDonorEx/valueAtAcceptorEx
+    #         self.calculateDirectExcitation()
 
     def donorSelected(self, selected, deselected):
         selected = self.proxy_donor.mapSelectionToSource(selected)
         selected_name = self.model_donor.item(selected.indexes()[0].row()).data().toString()
         self.donorSelection = []
-        try:
-            self.db_cursor.execute("SELECT * FROM spectra WHERE name=? AND type=?", (str(selected_name),'x',))
-            db_row = self.db_cursor.fetchall()
-            self.donorSelection.append(db_row[0][0])
-            xvalues = pickle.loads(str(db_row[0][3]))
-            yvalues = pickle.loads(str(db_row[0][4]))
-            lambda_max = xvalues[np.argmax(np.array(yvalues))]
-            self.basis_sets.setDonorEx(xvalues, yvalues)
-            self.donorExcitation_spin.setValue(xvalues[np.argmax(np.array(yvalues))])
-            self.plotDonor(lambda_max)
-            self.calculateLampIntRatio()
-        except IndexError:
-            pass
+        # try:
+        #     self.db_cursor.execute("SELECT * FROM spectra WHERE name=? AND type=?", (str(selected_name),'x',))
+        #     db_row = self.db_cursor.fetchall()
+        #     self.donorSelection.append(db_row[0][0])
+        #     xvalues = pickle.loads(str(db_row[0][3]))
+        #     yvalues = pickle.loads(str(db_row[0][4]))
+        #     lambda_max = xvalues[np.argmax(np.array(yvalues))]
+        #     self.basis_sets.setDonorEx(xvalues, yvalues)
+        #     # self.donorExcitation_spin.setValue(xvalues[np.argmax(np.array(yvalues))])
+        #     self.plotDonor(lambda_max)
+        #     # self.calculateLampIntRatio()
+        # except IndexError:
+        #     pass
 
         try:
             self.db_cursor.execute("SELECT * FROM spectra WHERE name=? AND type=?", (str(selected_name),'m',))
@@ -197,19 +197,19 @@ class BasisGui(QtGui.QDialog):
         selected = self.proxy_acceptor.mapSelectionToSource(selected)
         selected_name = self.model_acceptor.item(selected.indexes()[0].row()).data().toString()
         self.acceptorSelection = []
-        try:
-            self.db_cursor.execute("SELECT * FROM spectra WHERE name=? AND type=?", (str(selected_name),'x',))
-            db_row = self.db_cursor.fetchall()
-            self.acceptorSelection.append(db_row[0][0])
-            xvalues = pickle.loads(str(db_row[0][3]))
-            yvalues = pickle.loads(str(db_row[0][4]))
-            lambda_max = xvalues[np.argmax(np.array(yvalues))]
-            self.basis_sets.setAcceptorEx(xvalues, yvalues)
-            self.acceptorExcitation_spin.setValue(lambda_max)
-            self.plotAcceptor(lambda_max)
-            self.calculateLampIntRatio()
-        except IndexError:
-            pass
+        # try:
+        #     self.db_cursor.execute("SELECT * FROM spectra WHERE name=? AND type=?", (str(selected_name),'x',))
+        #     db_row = self.db_cursor.fetchall()
+        #     self.acceptorSelection.append(db_row[0][0])
+        #     xvalues = pickle.loads(str(db_row[0][3]))
+        #     yvalues = pickle.loads(str(db_row[0][4]))
+        #     lambda_max = xvalues[np.argmax(np.array(yvalues))]
+        #     self.basis_sets.setAcceptorEx(xvalues, yvalues)
+        #     # self.acceptorExcitation_spin.setValue(lambda_max)
+        #     self.plotAcceptor(lambda_max)
+        #     # self.calculateLampIntRatio()
+        # except IndexError:
+        #     pass
 
         try:
             self.db_cursor.execute("SELECT * FROM spectra WHERE name=? AND type=?", (str(selected_name),'m',))
@@ -262,22 +262,22 @@ class BasisGui(QtGui.QDialog):
 
     def sendDirectExcitationtoMainWindow(self):
         self.mainWindow.spectra.correctionFactor = self.basis_sets.correctionFactor
-        self.mainWindow.label_5.setText(_translate("MainWindow", "FRET Efficiency", None))
+        self.mainWindow.label_5.setText(_translate("MainWindow", "FRET Index", None))
         self.mainWindow.direct_emission_btn.setEnabled(True)
-        self.mainWindow.direct_emission_lbl.setText(_translate("MainWindow", "Corr. Factor : %.2f" % self.basis_sets.correctionFactor, None))
+        # self.mainWindow.direct_emission_lbl.setText(_translate("MainWindow", "Corr. Factor : %.2f" % self.basis_sets.correctionFactor, None))
         if len(self.mainWindow.spectra.directEmission.keys()) == 0:
             self.mainWindow.directEmission_clicked()
         else:
             self.mainWindow.scale_directEmission()
 
-    def calculateDirectExcitation(self):
-        if self.acceptorExcitation_spin.value() > 1.0 and self.donorExcitation_spin.value() > 1.0 and self.basis_sets.lampIntensityRatio > 0.0:
-            left = self.slitWidth_spin.value() * -1 / 2
-            right = self.slitWidth_spin.value()/2
-            numerator = interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.donorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.donorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.donorExcitation_spin.value() + right)
-            denominator = interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.acceptorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.acceptorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.acceptorExcitation_spin.value() + right)
-            self.basis_sets.correctionFactor = 1/self.basis_sets.lampIntensityRatio * (numerator/denominator)
-            self.outputCorrectionFactor()
+    # def calculateDirectExcitation(self):
+    #     if self.acceptorExcitation_spin.value() > 1.0 and self.donorExcitation_spin.value() > 1.0 and self.basis_sets.lampIntensityRatio > 0.0:
+    #         left = self.slitWidth_spin.value() * -1 / 2
+    #         right = self.slitWidth_spin.value()/2
+    #         numerator = interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.donorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.donorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.donorExcitation_spin.value() + right)
+    #         denominator = interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.acceptorExcitation_spin.value()) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.acceptorExcitation_spin.value() + left) + interpolation.get_interpolated_val(self.basis_sets.acceptorExcitation, self.acceptorExcitation_spin.value() + right)
+    #         self.basis_sets.correctionFactor = 1/self.basis_sets.lampIntensityRatio * (numerator/denominator)
+    #         self.outputCorrectionFactor()
 
     def outputCorrectionFactor(self):
         self.setDirectExcitation_btn.setText(_translate("BasisGui", "Set Emission Correction Factor (%.2f)" % self.basis_sets.correctionFactor, None))
@@ -289,14 +289,14 @@ class BasisGui(QtGui.QDialog):
                 self.db_cursor.execute("DELETE FROM spectra WHERE id=?", (i,))
             self.donorSelection = []
             self.donorEmPlot.clear()
-            self.donorExPlot.clear()
+            # self.donorExPlot.clear()
             self.setupBasisSets()
         elif className == 'a':
             for i in self.acceptorSelection:
                 self.db_cursor.execute("DELETE FROM attributes WHERE id=?", (i,))
                 self.db_cursor.execute("DELETE FROM spectra WHERE id=?", (i,))
             self.acceptorSelection = []
-            self.acceptorExPlot.clear()
+            # self.acceptorExPlot.clear()
             self.acceptorEmPlot.clear()
             self.setupBasisSets()
         elif className == 'b':
@@ -305,16 +305,13 @@ class BasisGui(QtGui.QDialog):
                 self.db_cursor.execute("DELETE FROM spectra WHERE id=?", (i,))
             self.backgroundPlot.clear()
             self.setupBasisSets()
-        elif className == 'l':
-            self.db_cursor.execute("DELETE FROM lamps WHERE id=?", (self.lampSelection,))
-            self.setupLamps()
         self.db_handle.commit()
 
     def loadSpectraIntoDatabase(self, className):
         db_dialog = DB_Dialog(className)
         returnVal = db_dialog.exec_()
         self.setupBasisSets()
-        self.setupLamps()
+        # self.setupLamps()
 
     @QtCore.pyqtSlot()
     def plotBackground(self):
@@ -323,17 +320,17 @@ class BasisGui(QtGui.QDialog):
         yvalues = list(np.divide(self.basis_sets.background['y'], np.max(np.array(self.basis_sets.background['y']))))
         self.backgroundPlot = self.preview_widget.plot(list(self.basis_sets.background['x']), yvalues, pen=background_color, antialias=True)
 
-    @QtCore.pyqtSlot()
-    def plotDonor(self, lmax):
-        donor_color = pg.mkPen({'color': '31C9E8', 'width': 2})
-        self.donorExPlot.clear()
-        if self.donorPlotLine.value() == 0:
-            donor_linecolor = pg.mkPen({'color': '31C9E8', 'width': 2, 'style': QtCore.Qt.DotLine})
-            self.donorPlotLine = self.preview_widget.addLine(x=lmax, pen=donor_linecolor)
-        else:
-            self.donorPlotLine.setValue(lmax)
-        yvalues = list(np.divide(self.basis_sets.donorExcitation['y'], np.max(np.array(self.basis_sets.donorExcitation['y']))))
-        self.donorExPlot = self.preview_widget.plot(list(self.basis_sets.donorExcitation['x']), yvalues, pen=donor_color, antialias=True)
+    # @QtCore.pyqtSlot()
+    # def plotDonor(self, lmax):
+    #     donor_color = pg.mkPen({'color': '31C9E8', 'width': 2})
+    #     self.donorExPlot.clear()
+    #     if self.donorPlotLine.value() == 0:
+    #         donor_linecolor = pg.mkPen({'color': '31C9E8', 'width': 2, 'style': QtCore.Qt.DotLine})
+    #         self.donorPlotLine = self.preview_widget.addLine(x=lmax, pen=donor_linecolor)
+    #     else:
+    #         self.donorPlotLine.setValue(lmax)
+    #     yvalues = list(np.divide(self.basis_sets.donorExcitation['y'], np.max(np.array(self.basis_sets.donorExcitation['y']))))
+    #     self.donorExPlot = self.preview_widget.plot(list(self.basis_sets.donorExcitation['x']), yvalues, pen=donor_color, antialias=True)
 
     @QtCore.pyqtSlot()
     def plotDonorEmission(self):
@@ -342,17 +339,17 @@ class BasisGui(QtGui.QDialog):
         yvalues = list(np.divide(self.basis_sets.donorEmission['y'], np.max(np.array(self.basis_sets.donorEmission['y']))))
         self.donorEmPlot = self.preview_widget.plot(list(self.basis_sets.donorEmission['x']), yvalues, pen=donor_color, antialias=True)
 
-    @QtCore.pyqtSlot()
-    def plotAcceptor(self, lmax):
-        acceptor_color = pg.mkPen({'color': 'E85031', 'width': 2})
-        self.acceptorExPlot.clear()
-        if self.acceptorPlotLine.value() == 0:
-            acceptor_linecolor = pg.mkPen({'color': 'E85031', 'width': 2, 'style': QtCore.Qt.DotLine})
-            self.acceptorPlotLine = self.preview_widget.addLine(x=lmax, pen=acceptor_linecolor)
-        else:
-            self.acceptorPlotLine.setValue(lmax)
-        yvalues = list(np.divide(self.basis_sets.acceptorExcitation['y'], np.max(np.array(self.basis_sets.acceptorExcitation['y']))))
-        self.acceptorExPlot = self.preview_widget.plot(list(self.basis_sets.acceptorExcitation['x']), yvalues, pen=acceptor_color, antialias=True)
+    # @QtCore.pyqtSlot()
+    # def plotAcceptor(self, lmax):
+    #     acceptor_color = pg.mkPen({'color': 'E85031', 'width': 2})
+    #     self.acceptorExPlot.clear()
+    #     if self.acceptorPlotLine.value() == 0:
+    #         acceptor_linecolor = pg.mkPen({'color': 'E85031', 'width': 2, 'style': QtCore.Qt.DotLine})
+    #         self.acceptorPlotLine = self.preview_widget.addLine(x=lmax, pen=acceptor_linecolor)
+    #     else:
+    #         self.acceptorPlotLine.setValue(lmax)
+    #     yvalues = list(np.divide(self.basis_sets.acceptorExcitation['y'], np.max(np.array(self.basis_sets.acceptorExcitation['y']))))
+    #     self.acceptorExPlot = self.preview_widget.plot(list(self.basis_sets.acceptorExcitation['x']), yvalues, pen=acceptor_color, antialias=True)
 
     @QtCore.pyqtSlot()
     def plotAcceptorEmission(self):
@@ -361,29 +358,33 @@ class BasisGui(QtGui.QDialog):
         yvalues = list(np.divide(self.basis_sets.acceptorEmission['y'], np.max(np.array(self.basis_sets.acceptorEmission['y']))))
         self.acceptorEmPlot = self.preview_widget.plot(list(self.basis_sets.acceptorEmission['x']), yvalues, pen=acceptor_color, antialias=True)
 
-    @QtCore.pyqtSlot()
-    def acceptorExcitationChanged(self):
-        if self.acceptorPlotLine.value() == 0:
-            acceptor_linecolor = pg.mkPen({'color': 'E85031', 'width': 2, 'style': QtCore.Qt.DotLine})
-            self.acceptorPlotLine = self.preview_widget.addLine(x=self.acceptorExcitation_spin.value(), pen=acceptor_linecolor)
-        else:
-            self.acceptorPlotLine.setValue(self.acceptorExcitation_spin.value())
-        self.calculateDirectExcitation()
+    # @QtCore.pyqtSlot()
+    # def acceptorExcitationChanged(self):
+    #     if self.acceptorPlotLine.value() == 0:
+    #         acceptor_linecolor = pg.mkPen({'color': 'E85031', 'width': 2, 'style': QtCore.Qt.DotLine})
+    #         self.acceptorPlotLine = self.preview_widget.addLine(x=self.acceptorExcitation_spin.value(), pen=acceptor_linecolor)
+    #     else:
+    #         self.acceptorPlotLine.setValue(self.acceptorExcitation_spin.value())
+    #     self.calculateDirectExcitation()
+    #
+    # @QtCore.pyqtSlot()
+    # def donorExcitationChanged(self):
+    #     if self.donorPlotLine.value() == 0:
+    #         donor_linecolor = pg.mkPen({'color': '31C9E8', 'width': 2, 'style': QtCore.Qt.DotLine})
+    #         self.donorPlotLine = self.preview_widget.addLine(x=self.donorExcitation_spin.value(), pen=donor_linecolor)
+    #     else:
+    #         self.donorPlotLine.setValue(self.donorExcitation_spin.value())
+    #     self.calculateDirectExcitation()
 
     @QtCore.pyqtSlot()
-    def donorExcitationChanged(self):
-        if self.donorPlotLine.value() == 0:
-            donor_linecolor = pg.mkPen({'color': '31C9E8', 'width': 2, 'style': QtCore.Qt.DotLine})
-            self.donorPlotLine = self.preview_widget.addLine(x=self.donorExcitation_spin.value(), pen=donor_linecolor)
-        else:
-            self.donorPlotLine.setValue(self.donorExcitation_spin.value())
-        self.calculateDirectExcitation()
+    def on_close_btn_clicked(self):
+        self.close()
 
     def setupUi(self, BasisGui):
         BasisGui.setObjectName(_fromUtf8("BasisGui"))
-        BasisGui.resize(800, 770)
-        BasisGui.setMinimumSize(QtCore.QSize(800, 770))
-        BasisGui.setMaximumSize(QtCore.QSize(800, 770))
+        BasisGui.resize(800, 720)
+        BasisGui.setMinimumSize(QtCore.QSize(800, 720))
+        BasisGui.setMaximumSize(QtCore.QSize(800, 720))
         BasisGui.setMouseTracking(False)
         self.layoutWidget = QtGui.QWidget(BasisGui)
         self.layoutWidget.setGeometry(QtCore.QRect(20, 330, 761, 23))
@@ -435,42 +436,42 @@ class BasisGui(QtGui.QDialog):
         self.horizontalLayout_2 = QtGui.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setMargin(0)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        self.line_2 = QtGui.QFrame(self.horizontalLayoutWidget_2)
-        self.line_2.setFrameShape(QtGui.QFrame.HLine)
-        self.line_2.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_2.setObjectName(_fromUtf8("line_2"))
-        self.horizontalLayout_2.addWidget(self.line_2)
-        self.layoutWidget1 = QtGui.QWidget(BasisGui)
-        self.layoutWidget1.setGeometry(QtCore.QRect(20, 668, 761, 33))
-        self.layoutWidget1.setObjectName(_fromUtf8("layoutWidget1"))
-        self.wavelengthLayout = QtGui.QHBoxLayout(self.layoutWidget1)
-        self.wavelengthLayout.setMargin(0)
-        self.wavelengthLayout.setObjectName(_fromUtf8("wavelengthLayout"))
-        self.donorExcitation_spin = QtGui.QDoubleSpinBox(self.layoutWidget1)
-        self.donorExcitation_spin.setMinimum(1.0)
-        self.donorExcitation_spin.setMaximum(1400.0)
-        self.donorExcitation_spin.setObjectName(_fromUtf8("donorExcitation_spin"))
-        self.wavelengthLayout.addWidget(self.donorExcitation_spin)
-        self.line_3 = QtGui.QFrame(self.layoutWidget1)
-        self.line_3.setFrameShape(QtGui.QFrame.VLine)
-        self.line_3.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_3.setObjectName(_fromUtf8("line_3"))
-        self.wavelengthLayout.addWidget(self.line_3)
-        self.acceptorExcitation_spin = QtGui.QDoubleSpinBox(self.layoutWidget1)
-        self.acceptorExcitation_spin.setMinimum(1.0)
-        self.acceptorExcitation_spin.setMaximum(1400.0)
-        self.acceptorExcitation_spin.setObjectName(_fromUtf8("acceptorExcitation_spin"))
-        self.wavelengthLayout.addWidget(self.acceptorExcitation_spin)
-        self.line_4 = QtGui.QFrame(self.layoutWidget1)
-        self.line_4.setFrameShape(QtGui.QFrame.VLine)
-        self.line_4.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_4.setObjectName(_fromUtf8("line_4"))
-        self.wavelengthLayout.addWidget(self.line_4)
-        self.slitWidth_spin = QtGui.QSpinBox(self.layoutWidget1)
-        self.slitWidth_spin.setMinimum(2)
-        self.slitWidth_spin.setMaximum(10)
-        self.slitWidth_spin.setObjectName(_fromUtf8("spinBox"))
-        self.wavelengthLayout.addWidget(self.slitWidth_spin)
+        # self.line_2 = QtGui.QFrame(self.horizontalLayoutWidget_2)
+        # self.line_2.setFrameShape(QtGui.QFrame.HLine)
+        # self.line_2.setFrameShadow(QtGui.QFrame.Sunken)
+        # self.line_2.setObjectName(_fromUtf8("line_2"))
+        # self.horizontalLayout_2.addWidget(self.line_2)
+        # self.layoutWidget1 = QtGui.QWidget(BasisGui)
+        # self.layoutWidget1.setGeometry(QtCore.QRect(20, 668, 761, 33))
+        # self.layoutWidget1.setObjectName(_fromUtf8("layoutWidget1"))
+        # self.wavelengthLayout = QtGui.QHBoxLayout(self.layoutWidget1)
+        # self.wavelengthLayout.setMargin(0)
+        # self.wavelengthLayout.setObjectName(_fromUtf8("wavelengthLayout"))
+        # self.donorExcitation_spin = QtGui.QDoubleSpinBox(self.layoutWidget1)
+        # self.donorExcitation_spin.setMinimum(1.0)
+        # self.donorExcitation_spin.setMaximum(1400.0)
+        # self.donorExcitation_spin.setObjectName(_fromUtf8("donorExcitation_spin"))
+        # self.wavelengthLayout.addWidget(self.donorExcitation_spin)
+        # self.line_3 = QtGui.QFrame(self.layoutWidget1)
+        # self.line_3.setFrameShape(QtGui.QFrame.VLine)
+        # self.line_3.setFrameShadow(QtGui.QFrame.Sunken)
+        # self.line_3.setObjectName(_fromUtf8("line_3"))
+        # self.wavelengthLayout.addWidget(self.line_3)
+        # self.acceptorExcitation_spin = QtGui.QDoubleSpinBox(self.layoutWidget1)
+        # self.acceptorExcitation_spin.setMinimum(1.0)
+        # self.acceptorExcitation_spin.setMaximum(1400.0)
+        # self.acceptorExcitation_spin.setObjectName(_fromUtf8("acceptorExcitation_spin"))
+        # self.wavelengthLayout.addWidget(self.acceptorExcitation_spin)
+        # self.line_4 = QtGui.QFrame(self.layoutWidget1)
+        # self.line_4.setFrameShape(QtGui.QFrame.VLine)
+        # self.line_4.setFrameShadow(QtGui.QFrame.Sunken)
+        # self.line_4.setObjectName(_fromUtf8("line_4"))
+        # self.wavelengthLayout.addWidget(self.line_4)
+        # self.slitWidth_spin = QtGui.QSpinBox(self.layoutWidget1)
+        # self.slitWidth_spin.setMinimum(2)
+        # self.slitWidth_spin.setMaximum(10)
+        # self.slitWidth_spin.setObjectName(_fromUtf8("spinBox"))
+        # self.wavelengthLayout.addWidget(self.slitWidth_spin)
         self.layoutWidget2 = QtGui.QWidget(BasisGui)
         self.layoutWidget2.setGeometry(QtCore.QRect(20, 390, 761, 151))
         self.layoutWidget2.setObjectName(_fromUtf8("layoutWidget2"))
@@ -501,39 +502,39 @@ class BasisGui(QtGui.QDialog):
         self.background_list.horizontalHeader().setVisible(False)
         self.background_list.setObjectName(_fromUtf8("background_list"))
         self.tablesLayout.addWidget(self.background_list)
-        self.layoutWidget3 = QtGui.QWidget(BasisGui)
-        self.layoutWidget3.setGeometry(QtCore.QRect(20, 648, 761, 23))
-        self.layoutWidget3.setObjectName(_fromUtf8("layoutWidget3"))
-        self.wavelengthLabelLayout = QtGui.QHBoxLayout(self.layoutWidget3)
-        self.wavelengthLabelLayout.setMargin(0)
-        self.wavelengthLabelLayout.setObjectName(_fromUtf8("wavelengthLabelLayout"))
-        self.donorEx_lbl = QtGui.QLabel(self.layoutWidget3)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.donorEx_lbl.setFont(font)
-        self.donorEx_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.donorEx_lbl.setAlignment(QtCore.Qt.AlignCenter)
-        self.donorEx_lbl.setObjectName(_fromUtf8("donorEx_lbl"))
-        self.wavelengthLabelLayout.addWidget(self.donorEx_lbl)
-        self.acceptorEx_lbl = QtGui.QLabel(self.layoutWidget3)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.acceptorEx_lbl.setFont(font)
-        self.acceptorEx_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.acceptorEx_lbl.setAlignment(QtCore.Qt.AlignCenter)
-        self.acceptorEx_lbl.setObjectName(_fromUtf8("acceptorEx_lbl"))
-        self.wavelengthLabelLayout.addWidget(self.acceptorEx_lbl)
-        self.slitWidth_lbl = QtGui.QLabel(self.layoutWidget3)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.slitWidth_lbl.setFont(font)
-        self.slitWidth_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.slitWidth_lbl.setAlignment(QtCore.Qt.AlignCenter)
-        self.slitWidth_lbl.setObjectName(_fromUtf8("slitWidth_lbl"))
-        self.wavelengthLabelLayout.addWidget(self.slitWidth_lbl)
+        # self.layoutWidget3 = QtGui.QWidget(BasisGui)
+        # self.layoutWidget3.setGeometry(QtCore.QRect(20, 648, 761, 23))
+        # self.layoutWidget3.setObjectName(_fromUtf8("layoutWidget3"))
+        # self.wavelengthLabelLayout = QtGui.QHBoxLayout(self.layoutWidget3)
+        # self.wavelengthLabelLayout.setMargin(0)
+        # self.wavelengthLabelLayout.setObjectName(_fromUtf8("wavelengthLabelLayout"))
+        # self.donorEx_lbl = QtGui.QLabel(self.layoutWidget3)
+        # font = QtGui.QFont()
+        # font.setBold(True)
+        # font.setWeight(75)
+        # self.donorEx_lbl.setFont(font)
+        # self.donorEx_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
+        # self.donorEx_lbl.setAlignment(QtCore.Qt.AlignCenter)
+        # self.donorEx_lbl.setObjectName(_fromUtf8("donorEx_lbl"))
+        # self.wavelengthLabelLayout.addWidget(self.donorEx_lbl)
+        # self.acceptorEx_lbl = QtGui.QLabel(self.layoutWidget3)
+        # font = QtGui.QFont()
+        # font.setBold(True)
+        # font.setWeight(75)
+        # self.acceptorEx_lbl.setFont(font)
+        # self.acceptorEx_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
+        # self.acceptorEx_lbl.setAlignment(QtCore.Qt.AlignCenter)
+        # self.acceptorEx_lbl.setObjectName(_fromUtf8("acceptorEx_lbl"))
+        # self.wavelengthLabelLayout.addWidget(self.acceptorEx_lbl)
+        # self.slitWidth_lbl = QtGui.QLabel(self.layoutWidget3)
+        # font = QtGui.QFont()
+        # font.setBold(True)
+        # font.setWeight(75)
+        # self.slitWidth_lbl.setFont(font)
+        # self.slitWidth_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
+        # self.slitWidth_lbl.setAlignment(QtCore.Qt.AlignCenter)
+        # self.slitWidth_lbl.setObjectName(_fromUtf8("slitWidth_lbl"))
+        # self.wavelengthLabelLayout.addWidget(self.slitWidth_lbl)
         self.layoutWidget4 = QtGui.QWidget(BasisGui)
         self.layoutWidget4.setGeometry(QtCore.QRect(20, 598, 761, 33))
         self.layoutWidget4.setObjectName(_fromUtf8("layoutWidget4"))
@@ -553,35 +554,35 @@ class BasisGui(QtGui.QDialog):
         self.correctionFactor_spin.setSingleStep(0.01)
         self.correctionFactor_spin.setObjectName(_fromUtf8("correctionFactor_spin"))
         self.loadLayout.addWidget(self.correctionFactor_spin)
-        self.line_5 = QtGui.QFrame(self.layoutWidget4)
-        self.line_5.setFrameShape(QtGui.QFrame.VLine)
-        self.line_5.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_5.setObjectName(_fromUtf8("line_5"))
-        self.loadLayout.addWidget(self.line_5)
-        self.lamp_lbl = QtGui.QLabel(self.layoutWidget4)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.lamp_lbl.setFont(font)
-        self.lamp_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lamp_lbl.setAlignment(QtCore.Qt.AlignCenter)
-        self.lamp_lbl.setObjectName(_fromUtf8("lamp_lbl"))
-        self.loadLayout.addWidget(self.lamp_lbl)
-        self.lamp_box = QtGui.QComboBox(self.layoutWidget4)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lamp_box.sizePolicy().hasHeightForWidth())
-        self.lamp_box.setSizePolicy(sizePolicy)
-        self.lamp_box.setMinimumSize(QtCore.QSize(200, 0))
-        self.lamp_box.setObjectName(_fromUtf8("lamp_box"))
-        self.loadLayout.addWidget(self.lamp_box)
-        self.addLamp = QtGui.QToolButton(self.layoutWidget4)
-        self.addLamp.setObjectName(_fromUtf8("addLamp"))
-        self.loadLayout.addWidget(self.addLamp)
-        self.deleteLamp = QtGui.QToolButton(self.layoutWidget4)
-        self.deleteLamp.setObjectName(_fromUtf8("deleteLamp"))
-        self.loadLayout.addWidget(self.deleteLamp)
+        # self.line_5 = QtGui.QFrame(self.layoutWidget4)
+        # self.line_5.setFrameShape(QtGui.QFrame.VLine)
+        # self.line_5.setFrameShadow(QtGui.QFrame.Sunken)
+        # self.line_5.setObjectName(_fromUtf8("line_5"))
+        # self.loadLayout.addWidget(self.line_5)
+        # self.lamp_lbl = QtGui.QLabel(self.layoutWidget4)
+        # font = QtGui.QFont()
+        # font.setBold(True)
+        # font.setWeight(75)
+        # self.lamp_lbl.setFont(font)
+        # self.lamp_lbl.setInputMethodHints(QtCore.Qt.ImhNone)
+        # self.lamp_lbl.setAlignment(QtCore.Qt.AlignCenter)
+        # self.lamp_lbl.setObjectName(_fromUtf8("lamp_lbl"))
+        # self.loadLayout.addWidget(self.lamp_lbl)
+        # self.lamp_box = QtGui.QComboBox(self.layoutWidget4)
+        # sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setHeightForWidth(self.lamp_box.sizePolicy().hasHeightForWidth())
+        # self.lamp_box.setSizePolicy(sizePolicy)
+        # self.lamp_box.setMinimumSize(QtCore.QSize(200, 0))
+        # self.lamp_box.setObjectName(_fromUtf8("lamp_box"))
+        # self.loadLayout.addWidget(self.lamp_box)
+        # self.addLamp = QtGui.QToolButton(self.layoutWidget4)
+        # self.addLamp.setObjectName(_fromUtf8("addLamp"))
+        # self.loadLayout.addWidget(self.addLamp)
+        # self.deleteLamp = QtGui.QToolButton(self.layoutWidget4)
+        # self.deleteLamp.setObjectName(_fromUtf8("deleteLamp"))
+        # self.loadLayout.addWidget(self.deleteLamp)
         self.horizontalLayoutWidget_3 = QtGui.QWidget(BasisGui)
         self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(30, 578, 741, 20))
         self.horizontalLayoutWidget_3.setObjectName(_fromUtf8("horizontalLayoutWidget_3"))
@@ -657,23 +658,30 @@ class BasisGui(QtGui.QDialog):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem1, 0, 2, 1, 1)
         self.horizontalLayoutWidget_5 = QtGui.QWidget(BasisGui)
-        self.horizontalLayoutWidget_5.setGeometry(QtCore.QRect(20, 720, 761, 44))
+        self.horizontalLayoutWidget_5.setGeometry(QtCore.QRect(20, 660, 761, 44))
         self.horizontalLayoutWidget_5.setObjectName(_fromUtf8("horizontalLayoutWidget_5"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_5)
         self.horizontalLayout.setMargin(0)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.setDirectExcitation_btn = QtGui.QPushButton(self.horizontalLayoutWidget_5)
         font = QtGui.QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         self.setDirectExcitation_btn.setFont(font)
         self.setDirectExcitation_btn.setObjectName(_fromUtf8("setDirectExcitation_btn"))
         self.horizontalLayout.addWidget(self.setDirectExcitation_btn)
         self.sendBasisSetsToMain_btn = QtGui.QPushButton(self.horizontalLayoutWidget_5)
         font = QtGui.QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         self.sendBasisSetsToMain_btn.setFont(font)
         self.sendBasisSetsToMain_btn.setObjectName(_fromUtf8("sendBasisSetsToMain_btn"))
         self.horizontalLayout.addWidget(self.sendBasisSetsToMain_btn)
+        self.close_btn = QtGui.QPushButton(self.horizontalLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.close_btn.setFont(font)
+        self.close_btn.setObjectName(_fromUtf8("setDirectExcitation_btn"))
+        self.horizontalLayout.addWidget(self.close_btn)
+
         self.retranslateUi(BasisGui)
         QtCore.QMetaObject.connectSlotsByName(BasisGui)
 
@@ -682,20 +690,20 @@ class BasisGui(QtGui.QDialog):
         self.donor_lbl.setText(_translate("BasisGui", "Donor Basis Sets", None))
         self.acceptor_lbl.setText(_translate("BasisGui", "Acceptor Basis Sets", None))
         self.background_lbl.setText(_translate("BasisGui", "Background Basis Sets", None))
-        self.donorExcitation_spin.setToolTip(_translate("BasisGui", "Excitation wavelength for donor emission", None))
-        self.acceptorExcitation_spin.setToolTip(_translate("BasisGui", "Excitation wavelength for collecting only the acceptor spectra", None))
-        self.slitWidth_spin.setToolTip(_translate("BasisGui", "Slit Width for the measurement", None))
+        # self.donorExcitation_spin.setToolTip(_translate("BasisGui", "Excitation wavelength for donor emission", None))
+        # self.acceptorExcitation_spin.setToolTip(_translate("BasisGui", "Excitation wavelength for collecting only the acceptor spectra", None))
+        # self.slitWidth_spin.setToolTip(_translate("BasisGui", "Slit Width for the measurement", None))
         self.donor_list.setToolTip(_translate("BasisGui", "List of Donor basis sets. Select a donor to load the corresponding basis set for fitting", None))
         self.acceptor_list.setToolTip(_translate("BasisGui", "List of acceptor basis sets. Select an acceptor to load the corresponding basis set for fitting", None))
         self.background_list.setToolTip(_translate("BasisGui", "List of background basis sets. Select a background to load the corresponding basis set for fitting", None))
-        self.donorEx_lbl.setText(_translate("BasisGui", "Donor Excitation", None))
-        self.acceptorEx_lbl.setText(_translate("BasisGui", "Acceptor Excitation", None))
-        self.slitWidth_lbl.setText(_translate("BasisGui", "Slit Width", None))
+        # self.donorEx_lbl.setText(_translate("BasisGui", "Donor Excitation", None))
+        # self.acceptorEx_lbl.setText(_translate("BasisGui", "Acceptor Excitation", None))
+        # self.slitWidth_lbl.setText(_translate("BasisGui", "Slit Width", None))
         self.correctionFactor_cbx.setText(_translate("BasisGui", "Manual Correction Factor", None))
-        self.lamp_lbl.setText(_translate("BasisGui", "Choose Lamp Spectra", None))
-        self.lamp_box.setToolTip(_translate("BasisGui", "Select the lamp used for collecting fluorescence spectra", None))
-        self.addLamp.setText(_translate("BasisGui", "+", None))
-        self.deleteLamp.setText(_translate("BasisGui", "-", None))
+        # self.lamp_lbl.setText(_translate("BasisGui", "Choose Lamp Spectra", None))
+        # self.lamp_box.setToolTip(_translate("BasisGui", "Select the lamp used for collecting fluorescence spectra", None))
+        # self.addLamp.setText(_translate("BasisGui", "+", None))
+        # self.deleteLamp.setText(_translate("BasisGui", "-", None))
         self.donor_filter.setPlaceholderText(_translate("BasisGui", " Filter Donor Basis Sets", None))
         self.acceptor_filter.setPlaceholderText(_translate("BasisGui", " Filter Acceptor Basis Sets", None))
         self.background_filter.setPlaceholderText(_translate("BasisGui", " Filter Background Basis Sets", None))
@@ -707,31 +715,33 @@ class BasisGui(QtGui.QDialog):
         self.addBackground.setText(_translate("BasisGui", "+", None))
         self.setDirectExcitation_btn.setToolTip(_translate("BasisGui", "Set the calculated direct emission correction factor into the fitting window", None))
         self.setDirectExcitation_btn.setText(_translate("BasisGui", "Set Emission Correction Factor (0.00)", None))
-        self.sendBasisSetsToMain_btn.setText(_translate("BasisGui", "Send Basis Sets to Fytt", None))
+        self.sendBasisSetsToMain_btn.setText(_translate("BasisGui", "Load Basis Sets in Fytt", None))
+        self.close_btn.setText(_translate("BasisGui", "Close", None))
 
         self.donor_filter.textChanged.connect(self.on_donorfilter_textChanged)
         self.acceptor_filter.textChanged.connect(self.on_acceptorfilter_textChanged)
         self.background_filter.textChanged.connect(self.on_backgroundfilter_textChanged)
-        self.donorExcitation_spin.valueChanged.connect(self.donorExcitationChanged)
-        self.acceptorExcitation_spin.valueChanged.connect(self.acceptorExcitationChanged)
+        # self.donorExcitation_spin.valueChanged.connect(self.donorExcitationChanged)
+        # self.acceptorExcitation_spin.valueChanged.connect(self.acceptorExcitationChanged)
         self.addDonor.clicked.connect(functools.partial(self.loadSpectraIntoDatabase, 's'))
         self.addAcceptor.clicked.connect(functools.partial(self.loadSpectraIntoDatabase, 's'))
         self.addBackground.clicked.connect(functools.partial(self.loadSpectraIntoDatabase, 'b'))
-        self.addLamp.clicked.connect(functools.partial(self.loadSpectraIntoDatabase, 'l'))
+        # self.addLamp.clicked.connect(functools.partial(self.loadSpectraIntoDatabase, 'l'))
         self.deleteDonor.clicked.connect(functools.partial(self.deleteSpectraFromDatabase, 'd'))
         self.deleteAcceptor.clicked.connect(functools.partial(self.deleteSpectraFromDatabase, 'a'))
         self.deleteBackground.clicked.connect(functools.partial(self.deleteSpectraFromDatabase, 'b'))
-        self.deleteLamp.clicked.connect(functools.partial(self.deleteSpectraFromDatabase, 'l'))
+        # self.deleteLamp.clicked.connect(functools.partial(self.deleteSpectraFromDatabase, 'l'))
         self.sendBasisSetsToMain_btn.clicked.connect(self.sendBasisSetsToMainWindow)
         self.setDirectExcitation_btn.clicked.connect(self.sendDirectExcitationtoMainWindow)
-        self.slitWidth_spin.valueChanged.connect(self.slitValueChanged)
+        # self.slitWidth_spin.valueChanged.connect(self.slitValueChanged)
         self.correctionFactor_cbx.clicked.connect(self.manualCorrectionCheckState)
         self.correctionFactor_spin.valueChanged.connect(self.setManualCorrectionFactor)
+        self.close_btn.clicked.connect(self.on_close_btn_clicked)
         self.correctionFactor_cbx.setChecked(True)
         self.correctionFactor_spin.setEnabled(False)
 
-    def slitValueChanged(self):
-        self.calculateLampIntRatio()
+    # def slitValueChanged(self):
+    #     self.calculateLampIntRatio()
 
     def manualCorrectionCheckState(self):
         if self.correctionFactor_cbx.isChecked():
@@ -749,16 +759,17 @@ class BasisGui(QtGui.QDialog):
         self.outputCorrectionFactor()
 
     def changeStateForManual(self, state):
-        self.lamp_box.setEnabled(state)
-        self.lamp_lbl.setEnabled(state)
-        self.donorExcitation_spin.setEnabled(state)
-        self.acceptorExcitation_spin.setEnabled(state)
-        self.slitWidth_spin.setEnabled(state)
-        self.donorEx_lbl.setEnabled(state)
-        self.acceptorEx_lbl.setEnabled(state)
-        self.slitWidth_lbl.setEnabled(state)
-        self.addLamp.setEnabled(state)
-        self.deleteLamp.setEnabled(state)
+        pass
+        # self.lamp_box.setEnabled(state)
+        # self.lamp_lbl.setEnabled(state)
+        # self.donorExcitation_spin.setEnabled(state)
+        # self.acceptorExcitation_spin.setEnabled(state)
+        # self.slitWidth_spin.setEnabled(state)
+        # self.donorEx_lbl.setEnabled(state)
+        # self.acceptorEx_lbl.setEnabled(state)
+        # self.slitWidth_lbl.setEnabled(state)
+        # self.addLamp.setEnabled(state)
+        # self.deleteLamp.setEnabled(state)
 
     @QtCore.pyqtSlot(str)
     def on_donorfilter_textChanged(self, text):

@@ -66,7 +66,7 @@ class DB_Dialog(QtGui.QDialog):
         filename = fD.getOpenFileName(caption="Choose File...")
         contents = self.spectra.read_spectra(filename, flag=True)
         if ex == True:
-            self.exFilePath.setText(filename)
+            # self.exFilePath.setText(filename)
             self.ExXvalues = contents['x']
             self.ExYvalues = list(np.divide(np.array(contents['y']), np.sum(np.array(contents['y']))))
         else:
@@ -85,18 +85,18 @@ class DB_Dialog(QtGui.QDialog):
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setMargin(0)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.exFile_lbl = QtGui.QLabel(self.horizontalLayoutWidget)
-        self.exFile_lbl.setObjectName(_fromUtf8("exFile_lbl"))
-        self.horizontalLayout.addWidget(self.exFile_lbl)
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
-        self.exFilePath = QtGui.QLineEdit(self.horizontalLayoutWidget)
-        self.exFilePath.setMinimumSize(QtCore.QSize(330, 0))
-        self.exFilePath.setObjectName(_fromUtf8("exFilePath"))
-        self.horizontalLayout.addWidget(self.exFilePath)
-        self.exLoadButton = QtGui.QPushButton(self.horizontalLayoutWidget)
-        self.exLoadButton.setObjectName(_fromUtf8("exLoadButton"))
-        self.horizontalLayout.addWidget(self.exLoadButton)
+        # self.exFile_lbl = QtGui.QLabel(self.horizontalLayoutWidget)
+        # self.exFile_lbl.setObjectName(_fromUtf8("exFile_lbl"))
+        # self.horizontalLayout.addWidget(self.exFile_lbl)
+        # spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        # self.horizontalLayout.addItem(spacerItem)
+        # self.exFilePath = QtGui.QLineEdit(self.horizontalLayoutWidget)
+        # self.exFilePath.setMinimumSize(QtCore.QSize(330, 0))
+        # self.exFilePath.setObjectName(_fromUtf8("exFilePath"))
+        # self.horizontalLayout.addWidget(self.exFilePath)
+        # self.exLoadButton = QtGui.QPushButton(self.horizontalLayoutWidget)
+        # self.exLoadButton.setObjectName(_fromUtf8("exLoadButton"))
+        # self.horizontalLayout.addWidget(self.exLoadButton)
         self.groupBox = QtGui.QGroupBox(Dialog)
         self.groupBox.setGeometry(QtCore.QRect(10, 10, 601, 181))
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
@@ -136,9 +136,9 @@ class DB_Dialog(QtGui.QDialog):
         self.background_radio = QtGui.QRadioButton(self.horizontalLayoutWidget_2)
         self.background_radio.setObjectName(_fromUtf8("background_radio"))
         self.horizontalLayout_2.addWidget(self.background_radio)
-        self.lamp_radio = QtGui.QRadioButton(self.horizontalLayoutWidget_2)
-        self.lamp_radio.setObjectName(_fromUtf8("lamp_radio"))
-        self.horizontalLayout_2.addWidget(self.lamp_radio)
+        # self.lamp_radio = QtGui.QRadioButton(self.horizontalLayoutWidget_2)
+        # self.lamp_radio.setObjectName(_fromUtf8("lamp_radio"))
+        # self.horizontalLayout_2.addWidget(self.lamp_radio)
         self.horizontalLayoutWidget_4 = QtGui.QWidget(Dialog)
         self.horizontalLayoutWidget_4.setGeometry(QtCore.QRect(20, 230, 581, 41))
         self.horizontalLayoutWidget_4.setObjectName(_fromUtf8("horizontalLayoutWidget_4"))
@@ -165,44 +165,48 @@ class DB_Dialog(QtGui.QDialog):
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), self.accept)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.exem_radio, self.background_radio)
-        Dialog.setTabOrder(self.background_radio, self.lamp_radio)
-        Dialog.setTabOrder(self.lamp_radio, self.short_name)
+        # Dialog.setTabOrder(self.background_radio, self.lamp_radio)
+        # Dialog.setTabOrder(self.lamp_radio, self.short_name)
         Dialog.setTabOrder(self.short_name, self.long_name)
         Dialog.setTabOrder(self.long_name, self.environment)
-        Dialog.setTabOrder(self.environment, self.exFilePath)
-        Dialog.setTabOrder(self.exFilePath, self.exLoadButton)
-        Dialog.setTabOrder(self.exLoadButton, self.emFilePath)
+        # Dialog.setTabOrder(self.environment, self.exFilePath)
+        # Dialog.setTabOrder(self.exFilePath, self.exLoadButton)
+        # Dialog.setTabOrder(self.exLoadButton, self.emFilePath)
         Dialog.setTabOrder(self.emFilePath, self.emLoadButton)
         Dialog.setTabOrder(self.emLoadButton, self.buttonBox)
         self.retranslateUi(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Insert Spectra to Database", None))
-        self.exFile_lbl.setText(_translate("Dialog", "Excitation Spectrum", None))
-        self.exLoadButton.setText(_translate("Dialog", "Choose...", None))
+        # self.exFile_lbl.setText(_translate("Dialog", "Excitation Spectrum", None))
+        # self.exLoadButton.setText(_translate("Dialog", "Choose...", None))
         self.groupBox.setTitle(_translate("Dialog", "Basis Set Type", None))
         self.short_lbl.setText(_translate("Dialog", "Short Name", None))
         self.long_lbl.setText(_translate("Dialog", "Long Name", None))
         self.environment_lbl.setText(_translate("Dialog", "Environment", None))
         self.exem_radio.setText(_translate("Dialog", "Donor/Acceptor", None))
         self.background_radio.setText(_translate("Dialog", "Background", None))
-        self.lamp_radio.setText(_translate("Dialog", "Lamp", None))
+        # self.lamp_radio.setText(_translate("Dialog", "Lamp", None))
         self.emFile_lbl.setText(_translate("Dialog", "Emission Spectrum", None))
         self.emLoadButton.setText(_translate("Dialog", "Choose...", None))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(14)
+        self.emLoadButton.setFont(font)
 
-        self.exLoadButton.clicked.connect(functools.partial(self.chooseFileClicked, True))
+        # self.exLoadButton.clicked.connect(functools.partial(self.chooseFileClicked, True))
         self.emLoadButton.clicked.connect(functools.partial(self.chooseFileClicked, False))
         self.exem_radio.clicked.connect(self.spectraClassClicked)
         self.background_radio.clicked.connect(self.spectraClassClicked)
-        self.lamp_radio.clicked.connect(self.spectraClassClicked)
+        # self.lamp_radio.clicked.connect(self.spectraClassClicked)
 
     def spectraClassClicked(self):
         if self.exem_radio.isChecked():
             self.basisClass = 's'
         elif self.background_radio.isChecked():
             self.basisClass = 'b'
-        elif self.lamp_radio.isChecked():
-            self.basisClass = 'l'
+        # elif self.lamp_radio.isChecked():
+        #     self.basisClass = 'l'
         self.enableDisableBasisType(self.basisClass)
 
     def enableDisableBasisType(self, choice):
@@ -213,21 +217,15 @@ class DB_Dialog(QtGui.QDialog):
             self.long_lbl.setEnabled(True)
             self.environment.setEnabled(True)
             self.environment_lbl.setEnabled(True)
-            self.emFile_lbl.setEnabled(False)
-            self.emFilePath.setEnabled(False)
-            self.emLoadButton.setEnabled(False)
-            self.exFile_lbl.setText('Background Spectrum')
-        elif choice == 'l':
-            if not self.lamp_radio.isChecked():
-                self.lamp_radio.setChecked(True)
-            self.long_name.setEnabled(False)
-            self.long_lbl.setEnabled(False)
-            self.environment.setEnabled(False)
-            self.environment_lbl.setEnabled(False)
-            self.emFile_lbl.setEnabled(False)
-            self.emFilePath.setEnabled(False)
-            self.emLoadButton.setEnabled(False)
-            self.exFile_lbl.setText('Lamp Spectrum')
+            # self.exFile_lbl.setText('Background Spectrum')
+        # elif choice == 'l':
+        #     # if not self.lamp_radio.isChecked():
+        #     #     self.lamp_radio.setChecked(True)
+        #     self.long_name.setEnabled(False)
+        #     self.long_lbl.setEnabled(False)
+        #     self.environment.setEnabled(False)
+        #     self.environment_lbl.setEnabled(False)
+        #     # self.exFile_lbl.setText('Lamp Spectrum')
         elif choice == 's':
             if not self.exem_radio.isChecked():
                 self.exem_radio.setChecked(True)
@@ -235,23 +233,20 @@ class DB_Dialog(QtGui.QDialog):
             self.long_lbl.setEnabled(True)
             self.environment.setEnabled(True)
             self.environment_lbl.setEnabled(True)
-            self.emFile_lbl.setEnabled(True)
-            self.emFilePath.setEnabled(True)
-            self.emLoadButton.setEnabled(True)
-            self.exFile_lbl.setText('Excitation Spectrum')
+            # self.exFile_lbl.setText('Excitation Spectrum')
 
     def checkFields(self):
         returnValue = True
         if self.basisClass == 'b':
-            if str(self.short_name.text()) == '' or str(self.long_name.text()) == '' or str(self.environment.text()) == '' or str(self.exFilePath.text()) == '':
+            if str(self.short_name.text()) == '' or str(self.long_name.text()) == '' or str(self.environment.text()) == '':
                 returnValue = False
                 QtGui.QMessageBox.about(self, "Warning!", "Please verify that all the input fields are vaild.")
         elif self.basisClass == 's':
-            if str(self.short_name.text()) == '' or str(self.long_name.text()) == '' or str(self.environment.text()) == '' or str(self.exFilePath.text()) == '' or str(self.emFilePath.text()) == '':
+            if str(self.short_name.text()) == '' or str(self.long_name.text()) == '' or str(self.environment.text()) == '' or str(self.emFilePath.text()) == '':
                 returnValue = False
                 QtGui.QMessageBox.about(self, "Warning!", "Please verify that all the input fields are vaild.")
         elif self.basisClass == 'l':
-            if str(self.short_name.text()) == '' or str(self.exFilePath.text()) == '':
+            if str(self.short_name.text()) == '':
                 returnValue = False
                 QtGui.QMessageBox.about(self, "Warning!", "Please verify that all the input fields are vaild.")
         return returnValue

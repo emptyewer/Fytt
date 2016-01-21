@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>770</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>800</width>
-    <height>770</height>
+    <height>700</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>800</width>
-    <height>770</height>
+    <height>700</height>
    </size>
   </property>
   <property name="mouseTracking">
@@ -116,90 +116,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>700</y>
-     <width>741</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="Line" name="line_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>668</y>
-     <width>761</width>
-     <height>33</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="wavelengthLayout">
-    <item>
-     <widget class="QDoubleSpinBox" name="donorExcitation_spin">
-      <property name="toolTip">
-       <string>Excitation wavelength for donor emission</string>
-      </property>
-      <property name="minimum">
-       <double>1.000000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>1400.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="Line" name="line_3">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QDoubleSpinBox" name="acceptorExcitation_spin">
-      <property name="toolTip">
-       <string>Excitation wavelength for collecting only the acceptor spectra</string>
-      </property>
-      <property name="minimum">
-       <double>1.000000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>1400.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="Line" name="line_4">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="spinBox">
-      <property name="toolTip">
-       <string>Slit Width for the measurement</string>
-      </property>
-      <property name="minimum">
-       <number>2</number>
-      </property>
-      <property name="maximum">
-       <number>10</number>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
@@ -246,75 +162,6 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>648</y>
-     <width>761</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="wavelengthLabelLayout">
-    <item>
-     <widget class="QLabel" name="donorEx_lbl">
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="inputMethodHints">
-       <set>Qt::ImhNone</set>
-      </property>
-      <property name="text">
-       <string>Donor Excitation</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="acceptorEx_lbl">
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="inputMethodHints">
-       <set>Qt::ImhNone</set>
-      </property>
-      <property name="text">
-       <string>Acceptor Excitation</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="slitWidth_lbl">
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="inputMethodHints">
-       <set>Qt::ImhNone</set>
-      </property>
-      <property name="text">
-       <string>Slit Width</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
      <y>598</y>
      <width>761</width>
      <height>33</height>
@@ -336,65 +183,6 @@
     </item>
     <item>
      <widget class="QDoubleSpinBox" name="correctionFactor_spin"/>
-    </item>
-    <item>
-     <widget class="Line" name="line_5">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lamp_lbl">
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="inputMethodHints">
-       <set>Qt::ImhNone</set>
-      </property>
-      <property name="text">
-       <string>Choose Lamp Spectra</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="lamp_box">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>Select the lamp used for collecting fluorescence spectra</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QToolButton" name="addLamp">
-      <property name="text">
-       <string>+</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QToolButton" name="deleteLamp">
-      <property name="text">
-       <string>-</string>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -565,18 +353,18 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_5">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>720</y>
-     <width>761</width>
-     <height>44</height>
+     <y>650</y>
+     <width>751</width>
+     <height>36</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QCommandLinkButton" name="setDirectExcitation_btn">
+     <widget class="QPushButton" name="setDirectExcitation_btn">
       <property name="font">
        <font>
         <pointsize>12</pointsize>
@@ -591,7 +379,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QCommandLinkButton" name="sendBasisSetsToMain_btn">
+     <widget class="QPushButton" name="sendBasisSetsToMain_btn">
       <property name="font">
        <font>
         <pointsize>12</pointsize>

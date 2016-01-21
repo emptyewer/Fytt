@@ -12,7 +12,7 @@ Will automatically ensure that all build prerequisites are available
 via ez_setup
 
 Usage (Mac OS X):
-   python setup.py py2app -O2
+   /usr/bin/python setup.py py2app -O2
 
 Usage (Windows):
    python setup.py py2exe
