@@ -42,8 +42,34 @@ elif sys.platform == 'win32':
 #   ext_modules=ext_modules,
 # )
 
+
+def find_data_files(sources, targets, patterns):
+    """Locates the specified data-files and returns the matches
+    in a data_files compatible format.
+
+    source is the root of the source data tree.
+        Use '' or '.' for current directory.
+    target is the root of the target data tree.
+        Use '' or '.' for the distribution directory.
+    patterns is a sequence of glob-patterns for the
+        files you want to copy.
+    """
+
+    ret = {}
+    for i, source in enumerate(sources):
+        target = targets[i]
+        if glob.has_magic(source) or glob.has_magic(target):
+            raise ValueError("Magic not allowed in src, target")
+        pattern = os.path.join(source, patterns[i])
+        for filename in glob.glob(pattern):
+            if os.path.isfile(filename):
+                targetpath = os.path.join(target, os.path.relpath(filename, source))
+                path = os.path.dirname(targetpath)
+                ret.setdefault(path, []).append(filename)
+    return sorted(ret.items())
+
 APP = ['fytt.py']
-DATA_FILES = [('images', ['fytt-icon.png']), ('db', ['fytt_db.sqlite3'])]
+DATA_FILES = [('images', ['fytt-icon.png']), ('db', ['fytt_db.sqlite3']), ('ui', ['ui/info.ui'])]
 OPTIONS = {'argv_emulation': False,
            'iconfile' : 'Icon.icns',
            'plist': {'CFBundleGetInfoString': 'Fytt: Spectral decomposition by linear least squares fitting',
@@ -77,3 +103,6 @@ elif sys.platform == 'win32':
     options={"py2exe":{"includes" :["scipy.sparse.csgraph._validation", "scipy.special._ufuncs_cxx", "scipy.integrate"],
                        "optimize": 2}}
   )
+
+if sys.platform == 'darwin':
+    os.system('bunzip2 -c template.dmg.bz2 > dist/temp.dmg')

@@ -31,8 +31,8 @@ import math
 from scipy.optimize import curve_fit, OptimizeWarning, brute, fmin
 from spectra import Spectra
 from about import About_Dialog
-from filelist import FileList_Window
 from basisGui import BasisGui
+from info import Info_Dialog
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -59,7 +59,9 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self)
         self.setupUi(self)
         self.spectra = Spectra()
-
+        self.info_dialog = Info_Dialog()
+        self.info_dialog.mainWindow = self
+        self.info_dialog.close_btn.clicked.connect(self.info_hide_signal)
         self.ref_plotData = pg.PlotDataItem()
         self.cy3_plotData = pg.PlotDataItem()
         self.cy5_plotData = pg.PlotDataItem()
@@ -80,6 +82,9 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.cy5_slider.setValue(0.0)
         self.bkg_slider.setValue(0.0)
         self.offset_slider.setValue(0.0)
+
+    def info_hide_signal(self):
+        self.info_dialog.hide()
 
     def plot_reference(self):
         # queue = Queue.Queue()
@@ -233,6 +238,9 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.cy5_btn.setEnabled(True)
         self.bkg_btn.setEnabled(True)
         self.loadBasisSets_btn.setEnabled(True)
+        self.info_dialog.set_reference(os.path.basename(str(self.spectra.referenceFileName)))
+        self.info_dialog.show()
+
 
     def cy3_clicked(self, btn):
         try:
@@ -250,6 +258,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             self.spectra.cy3_basis = self.spectra.read_spectra(self.spectra.cy3FileName)
             (self.spectra.cy3_basis_scaled, self.spectra.cy3_scaleFactor) = self.spectra.rescale_basis(self.spectra.reference, self.spectra.cy3_basis, self.spectra.getX_forYmax(self.spectra.cy3_basis))
         # self.cy3_filename_lbl.setText(os.path.basename(str(self.spectra.cy3FileName)))
+        self.info_dialog.set_donor(os.path.basename(str(self.spectra.cy3FileName)))
         self.calculate_sum()
         self.calculate_residuals()
         self.plot_cy3()
@@ -281,6 +290,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             self.spectra.cy5_basis = self.spectra.read_spectra(self.spectra.cy5FileName)
             (self.spectra.cy5_basis_scaled, self.spectra.cy5_scaleFactor) = self.spectra.rescale_basis(self.spectra.reference, self.spectra.cy5_basis, self.spectra.getX_forYmax(self.spectra.cy5_basis))
         # self.cy5_filename_lbl.setText(os.path.basename(str(self.spectra.cy5FileName)))
+        self.info_dialog.set_acceptor(os.path.basename(str(self.spectra.cy5FileName)))
         self.cy5_spin.setValue(self.spectra.cy5_scaleFactor)
         self.cy5_spin.setEnabled(True)
         self.cy5_slider.setEnabled(True)
@@ -308,6 +318,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             self.spectra.bkg_basis = self.spectra.read_spectra(self.spectra.bkgFileName)
             (self.spectra.bkg_basis_scaled, self.spectra.bkg_scaleFactor) = self.spectra.rescale_basis(self.spectra.reference, self.spectra.bkg_basis, min(list(self.spectra.bkg_basis['x'])))
         # self.bkg_filename_lbl.setText(os.path.basename(str(self.spectra.bkgFileName)))
+        self.info_dialog.set_background(os.path.basename(str(self.spectra.bkgFileName)))
         self.calculate_sum()
         self.calculate_residuals()
         self.plot_bkg()
@@ -330,6 +341,8 @@ class Fytt_MainWindow(QtGui.QMainWindow):
 
     def load_directEmission(self):
         self.spectra.directEmission = self.spectra.read_spectra(self.spectra.directEmission_fileName, flag=True)
+        self.info_dialog.set_directexcitation(os.path.basename(str(self.spectra.directEmission_fileName) +
+                                                               " (Factor: %s)" % str(self.spectra.correctionFactor)))
         self.scale_directEmission()
 
     def scale_directEmission(self):
@@ -409,73 +422,75 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.plot_sum()
         self.plot_residual()
 
-    def actionBatchFitFunction(self):
-        self.filelist_window = FileList_Window()
-        self.filelist_window.fileList_wgt.clear()
-        self.filelist_window.loadFiles()
-        self.filelist_window.show()
-        self.filelist_window.fileList_wgt.currentItemChanged.connect(self.newSpectraSelected)
-        self.filelist_window.fitall_btn.clicked.connect(self.fitAllSpectra)
-        self.filelist_window.pushButton.clicked.connect(self.filelist_window.loadFiles)
-        self.filelist_window.pushButton_3.clicked.connect(self.clearSpectraList)
+    # def actionBatchFitFunction(self):
+    #     self.filelist_window = FileList_Window()
+    #     self.filelist_window.fileList_wgt.clear()
+    #     self.filelist_window.loadFiles()
+    #     self.filelist_window.show()
+    #     self.filelist_window.fileList_wgt.currentItemChanged.connect(self.newSpectraSelected)
+    #     self.filelist_window.fitall_btn.clicked.connect(self.fitAllSpectra)
+    #     self.filelist_window.pushButton.clicked.connect(self.filelist_window.loadFiles)
+    #     self.filelist_window.pushButton_3.clicked.connect(self.clearSpectraList)
 
     def clearSpectraList(self):
-        self.spectra = Spectra()
+        # self.spectra = Spectra()
         self.ref_plotData.clear()
         self.cy3_plotData.clear()
         self.cy5_plotData.clear()
         self.bkg_plotData.clear()
         self.cal_plotData.clear()
         self.res_plotData.clear()
+        self.cy5_correction_plotData.clear()
+
         # self.ref_filename_lbl.setText(_translate("MainWindow", "...", None))
         # self.cy3_filename_lbl.setText(_translate("MainWindow", "...", None))
         # self.cy5_filename_lbl.setText(_translate("MainWindow", "...", None))
         # self.bkg_filename_lbl.setText(_translate("MainWindow", "...", None))
-        self.filelist_window.spectraList = {}
-        self.filelist_window.cy3_basis = {}
-        self.filelist_window.cy5_basis = {}
-        self.filelist_window.bkg_basis = {}
-        self.filelist_window.cy3FileName = ''
-        self.filelist_window.cy5FileName = ''
-        self.filelist_window.bkgFileName = ''
-        self.filelist_window.fileList_wgt.clear()
+        # self.filelist_window.spectraList = {}
+        # self.filelist_window.cy3_basis = {}
+        # self.filelist_window.cy5_basis = {}
+        # self.filelist_window.bkg_basis = {}
+        # self.filelist_window.cy3FileName = ''
+        # self.filelist_window.cy5FileName = ''
+        # self.filelist_window.bkgFileName = ''
+        # self.filelist_window.fileList_wgt.clear()
 
 
-    def newSpectraSelected(self, currItem, prevItem):
-        if currItem:
-            self.reset_sliders()
-            self.spectra = self.filelist_window.getSpectra(str(currItem.text()))
-            self.load_reference(load=0)
-            self.load_cy3(load=0)
-            self.load_cy5(load=0)
-            self.load_bkg(load=0)
-            self.offset_spin.setValue(self.spectra.offset)
-
-    def fitAllSpectra(self):
-        spectralist = self.filelist_window.getAllSpectra()
-        threads = []
-        count = 1
-        queue = Queue.Queue()
-        for key in spectralist.keys():
-            self.spectra = spectralist[key]
-            self.load_reference(load=0)
-            self.load_cy3(load=0)
-            self.load_cy5(load=0)
-            self.load_bkg(load=0)
-            t = threading.Thread(target=self.autofit,
-                            name=key,
-                            args=[queue])
-            t.start()
-            t.join()
-            popt = queue.get()
-            self.setSpinValues(popt)
-            self.plot_cy3()
-            self.plot_cy5()
-            self.plot_bkg()
-            self.calculate_sum()
-            self.calculate_residuals()
-            self.plot_sum()
-            self.plot_residual()
+    # def newSpectraSelected(self, currItem, prevItem):
+    #     if currItem:
+    #         self.reset_sliders()
+    #         self.spectra = self.filelist_window.getSpectra(str(currItem.text()))
+    #         self.load_reference(load=0)
+    #         self.load_cy3(load=0)
+    #         self.load_cy5(load=0)
+    #         self.load_bkg(load=0)
+    #         self.offset_spin.setValue(self.spectra.offset)
+    #
+    # def fitAllSpectra(self):
+    #     spectralist = self.filelist_window.getAllSpectra()
+    #     threads = []
+    #     count = 1
+    #     queue = Queue.Queue()
+    #     for key in spectralist.keys():
+    #         self.spectra = spectralist[key]
+    #         self.load_reference(load=0)
+    #         self.load_cy3(load=0)
+    #         self.load_cy5(load=0)
+    #         self.load_bkg(load=0)
+    #         t = threading.Thread(target=self.autofit,
+    #                         name=key,
+    #                         args=[queue])
+    #         t.start()
+    #         t.join()
+    #         popt = queue.get()
+    #         self.setSpinValues(popt)
+    #         self.plot_cy3()
+    #         self.plot_cy5()
+    #         self.plot_bkg()
+    #         self.calculate_sum()
+    #         self.calculate_residuals()
+    #         self.plot_sum()
+    #         self.plot_residual()
 
     def setSpinValues(self, popt):
         self.reset_sliders()
@@ -1037,7 +1052,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
 
         self.toolButton.clicked.connect(self.actionAboutFunction)
         self.actionAbout.triggered.connect(self.actionAboutFunction)
-        self.actionBatch_Fit.triggered.connect(self.actionBatchFitFunction)
+        # self.actionBatch_Fit.triggered.connect(self.actionBatchFitFunction)
         self.plot_widget_viewbox.sigXRangeChanged.connect(self.sync_xranges)
         self.loadBasisSets_btn.clicked.connect(self.openBasisSetDatabase)
 
