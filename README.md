@@ -27,4 +27,4 @@ Untar fytt_linux_x64.tar.bz2
 
 #Screenshot (Version 2.6)
 
-![alt tag](https://github.com/emptyewer/Fytt2/blob/development/screenshot.png)
+![alt tag](https://raw.githubusercontent.com/emptyewer/Fytt/master/screenshot.png)
