@@ -103,6 +103,3 @@ elif sys.platform == 'win32':
     options={"py2exe":{"includes" :["scipy.sparse.csgraph._validation", "scipy.special._ufuncs_cxx", "scipy.integrate"],
                        "optimize": 2}}
   )
-
-if sys.platform == 'darwin':
-    os.system('bunzip2 -c template.dmg.bz2 > dist/temp.dmg')
