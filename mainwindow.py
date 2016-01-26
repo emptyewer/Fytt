@@ -148,7 +148,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             self.cy5_correction_plotData = self.plot_graph(self.spectra.cy5_correction, corr_color, 'Direct Emission', self.cy5_correction_plotData, self.plot_widget)
 
     def calculate_sum(self):
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.setFretValue()
 
     def calculate_residuals(self):
@@ -379,7 +379,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             index = self.spectra.cy3_basis['x'].index(key)
             self.spectra.cy3_basis_scaled['y'][index] = self.spectra.cy3_basis['y'][index] * (self.cy3_spin.value() + self.cy3_slider.value())
         self.spectra.cy3_scaleFactor = self.cy3_spin.value() + self.cy3_slider.value()
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.setFretValue()
         self.calculate_sum()
         self.calculate_residuals()
@@ -392,7 +392,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             index = self.spectra.cy5_basis['x'].index(key)
             self.spectra.cy5_basis_scaled['y'][index] = self.spectra.cy5_basis['y'][index] * (self.cy5_spin.value() + self.cy5_slider.value())
         self.spectra.cy5_scaleFactor = self.cy5_spin.value() + self.cy5_slider.value()
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.setFretValue()
         self.calculate_sum()
         self.calculate_residuals()
@@ -405,7 +405,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             index = self.spectra.bkg_basis['x'].index(key)
             self.spectra.bkg_basis_scaled['y'][index] = self.spectra.bkg_basis['y'][index] * (self.bkg_spin.value()  + self.bkg_slider.value())
         self.spectra.bkg_scaleFactor = self.bkg_spin.value() + self.bkg_slider.value()
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.setFretValue()
         self.calculate_sum()
         self.calculate_residuals()
@@ -414,7 +414,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.plot_residual()
 
     def offset_valueChanged(self):
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.spectra.offset = self.offset_spin.value() + self.offset_slider.value()
         self.setFretValue()
         self.calculate_sum()
@@ -433,7 +433,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
     #     self.filelist_window.pushButton_3.clicked.connect(self.clearSpectraList)
 
     def clearSpectraList(self):
-        # self.spectra = Spectra()
+        self.spectra = Spectra()
         self.ref_plotData.clear()
         self.cy3_plotData.clear()
         self.cy5_plotData.clear()
@@ -573,7 +573,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         if not self.acceptor_shift_cbx.isChecked():
             self.spectra.cy5_basis_scaled['x'] = list(np.array(self.spectra.cy5_basis['x']) + shift2)
             self.spectra.cy5_correction['x'] = self.spectra.cy5_basis_scaled['x']
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.spectra.calculate_residuals()
         self.setFretValue()
         return self.spectra.error
@@ -599,14 +599,14 @@ class Fytt_MainWindow(QtGui.QMainWindow):
             self.offset_spin.setValue(delta)
             self.spectra.offset = delta
 
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.setFretValue()
         return np.array(map(lambda i: self.spectra.calculated[i], x))
 
     def donor_shift_valueChanged(self):
-        self.donor_shift_cbx.setText(_translate("MainWindow", "Donor Shift (" + str(self.donor_shift_spin.value()) + ")", None))
+        # self.donor_shift_cbx.setText(_translate("MainWindow", "Donor Shift (" + str(self.donor_shift_spin.value()) + ")", None))
         self.spectra.cy3_basis_scaled['x'] = list(np.array(self.spectra.cy3_basis['x']) + self.donor_shift_spin.value())
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.spectra.calculate_residuals()
         self.plot_cy3()
         self.plot_sum()
@@ -614,10 +614,10 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.setFretValue()
 
     def acceptor_shift_valueChanged(self):
-        self.acceptor_shift_cbx.setText(_translate("MainWindow", "Acceptor Shift (" + str(self.acceptor_shift_spin.value()) + ")", None))
+        # self.acceptor_shift_cbx.setText(_translate("MainWindow", "Acceptor Shift (" + str(self.acceptor_shift_spin.value()) + ")", None))
         self.spectra.cy5_basis_scaled['x'] = list(np.array(self.spectra.cy5_basis['x']) + self.acceptor_shift_spin.value())
         self.spectra.cy5_correction['x'] = self.spectra.cy5_basis_scaled['x']
-        self.spectra.calculate_spectral_sum()
+        self.spectra.calculate_spectral_sum(area=self.area_peak_cbx.isChecked())
         self.spectra.calculate_residuals()
         self.plot_cy5()
         self.plot_correction()
@@ -632,6 +632,49 @@ class Fytt_MainWindow(QtGui.QMainWindow):
 
     def openBasisSetDatabase(self):
         self.BasisDB.show()
+
+    def area_peak_normalize(self):
+        if self.area_peak_cbx.isChecked():
+            self.area_peak_cbx.setText(_translate("MainWindow", "Area Normalize", None))
+        else:
+            self.area_peak_cbx.setText(_translate("MainWindow", "Peak Normalize", None))
+        self.calculate_sum()
+
+    def cy3_fixed_toggle(self):
+        if self.cy3_ckbox.isChecked():
+            self.cy3_ckbox.setText(_translate("MainWindow", "Donor (Fixed)", None))
+        else:
+            self.cy3_ckbox.setText(_translate("MainWindow", "Donor", None))
+
+    def cy5_fixed_toggle(self):
+        if self.cy5_ckbox.isChecked():
+            self.cy5_ckbox.setText(_translate("MainWindow", "Acceptor (Fixed)", None))
+        else:
+            self.cy5_ckbox.setText(_translate("MainWindow", "Acceptor", None))
+
+    def bkg_fixed_toggle(self):
+        if self.bkg_ckbox.isChecked():
+            self.bkg_ckbox.setText(_translate("MainWindow", "Background (Fixed)", None))
+        else:
+            self.bkg_ckbox.setText(_translate("MainWindow", "Background", None))
+
+    def offset_fixed_toggle(self):
+        if self.offset_ckbox.isChecked():
+            self.offset_ckbox.setText(_translate("MainWindow", "Offset (Fixed)", None))
+        else:
+            self.offset_ckbox.setText(_translate("MainWindow", "Offset", None))
+
+    def donor_shift_fixed_toggle(self):
+        if self.donor_shift_cbx.isChecked():
+            self.donor_shift_cbx.setText(_translate("MainWindow", "Donor Shift (Fixed)", None))
+        else:
+            self.donor_shift_cbx.setText(_translate("MainWindow", "Donor Shift", None))
+
+    def acceptor_shift_fixed_toggle(self):
+        if self.acceptor_shift_cbx.isChecked():
+            self.acceptor_shift_cbx.setText(_translate("MainWindow", "Acceptor Shift (Fixed)", None))
+        else:
+            self.acceptor_shift_cbx.setText(_translate("MainWindow", "Acceptor Shift", None))
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
@@ -776,6 +819,16 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.acceptor_shift_spin.setMinimum(-99)
         self.acceptor_shift_spin.setMaximum(100)
         self.multipliers_layout.addWidget(self.acceptor_shift_spin)
+
+        self.line1 = QtGui.QFrame(self.verticalLayoutWidget)
+        self.line1.setFrameShape(QtGui.QFrame.HLine)
+        self.line1.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line1.setObjectName(_fromUtf8("line1"))
+        self.multipliers_layout.addWidget(self.line1)
+
+        self.area_peak_cbx = QtGui.QCheckBox(self.verticalLayoutWidget)
+        self.area_peak_cbx.setObjectName(_fromUtf8("area_peak_cbx"))
+        self.multipliers_layout.addWidget(self.area_peak_cbx)
         self.label_5 = QtGui.QLabel(self.verticalLayoutWidget)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.multipliers_layout.addWidget(self.label_5)
@@ -960,8 +1013,8 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.cy5_ckbox.setText(_translate("MainWindow", "Acceptor", None))
         self.bkg_ckbox.setText(_translate("MainWindow", "Background", None))
         self.offset_ckbox.setText(_translate("MainWindow", "Offset", None))
-        self.donor_shift_cbx.setText(_translate("MainWindow", "Donor Shift", None))
-        self.acceptor_shift_cbx.setText(_translate("MainWindow", "Acceptor Shift", None))
+        self.donor_shift_cbx.setText(_translate("MainWindow", "Donor Shift (Fixed)", None))
+        self.acceptor_shift_cbx.setText(_translate("MainWindow", "Acceptor Shift (Fixed)", None))
         self.label_5.setText(_translate("MainWindow", "FRET Index", None))
         self.fret_lbl.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.0</span></p></body></html>", None))
         self.label_7.setText(_translate("MainWindow", "Mean Square Error", None))
@@ -970,6 +1023,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.actionAbout.setText(_translate("MainWindow", "About", None))
         self.actionBatch_Fit.setText(_translate("MainWindow", "Batch Fytt...", None))
         self.actionExit.setText(_translate("MainWindow", "Exit", None))
+        self.area_peak_cbx.setText(_translate("MainWindow", "Area Normalize", None))
         # self.ref_filename_lbl.setText(_translate("MainWindow", "...", None))
         # self.cy3_filename_lbl.setText(_translate("MainWindow", "...", None))
         # self.cy5_filename_lbl.setText(_translate("MainWindow", "...", None))
@@ -1055,6 +1109,16 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         # self.actionBatch_Fit.triggered.connect(self.actionBatchFitFunction)
         self.plot_widget_viewbox.sigXRangeChanged.connect(self.sync_xranges)
         self.loadBasisSets_btn.clicked.connect(self.openBasisSetDatabase)
+
+        self.area_peak_cbx.setChecked(True)
+        self.area_peak_cbx.stateChanged.connect(self.area_peak_normalize)
+
+        self.cy3_ckbox.stateChanged.connect(self.cy3_fixed_toggle)
+        self.cy5_ckbox.stateChanged.connect(self.cy5_fixed_toggle)
+        self.bkg_ckbox.stateChanged.connect(self.bkg_fixed_toggle)
+        self.offset_ckbox.stateChanged.connect(self.offset_fixed_toggle)
+        self.donor_shift_cbx.stateChanged.connect(self.donor_shift_fixed_toggle)
+        self.acceptor_shift_cbx.stateChanged.connect(self.acceptor_shift_fixed_toggle)
 
     # def test_function(self):
     #     self.spectra.reference = self.spectra.read_spectra('./basis_sets/reference.dat', False)

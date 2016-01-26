@@ -68,11 +68,13 @@ class DB_Dialog(QtGui.QDialog):
         if ex == True:
             # self.exFilePath.setText(filename)
             self.ExXvalues = contents['x']
-            self.ExYvalues = list(np.divide(np.array(contents['y']), np.sum(np.array(contents['y']))))
+            self.ExYvalues = list(np.divide(np.subtract(np.array(contents['y']), np.min(contents['y'])),
+                                            np.max(np.array(contents['y']))))
         else:
             self.emFilePath.setText(filename)
             self.EmXvalues = contents['x']
-            self.EmYvalues = list(np.divide(np.array(contents['y']), np.sum(np.array(contents['y']))))
+            self.EmYvalues = list(np.divide(np.subtract(np.array(contents['y']), np.min(contents['y'])),
+                                            np.max(np.array(contents['y']))))
 
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
@@ -272,7 +274,7 @@ class DB_Dialog(QtGui.QDialog):
                     current_id = largest_id + 1
                 db_cursor.execute("INSERT INTO backgrounds(id, name, acronym, environment) VALUES (?,?,?,?)", (current_id, str(self.long_name.text()).rstrip().lstrip(), str(self.short_name.text()).rstrip().lstrip(), str(self.environment.text()).rstrip().lstrip(),))
                 db_handle.commit()
-                db_cursor.execute("INSERT INTO spectra(id, name, type, x, y) VALUES (?,?,?,?,?)", (current_id, str(self.long_name.text()).rstrip().lstrip(), 'b', lite.Binary(pickle.dumps(self.ExXvalues, protocol=pickle.HIGHEST_PROTOCOL)), lite.Binary(pickle.dumps(self.ExYvalues, protocol=pickle.HIGHEST_PROTOCOL)),))
+                db_cursor.execute("INSERT INTO spectra(id, name, type, x, y) VALUES (?,?,?,?,?)", (current_id, str(self.long_name.text()).rstrip().lstrip(), 'b', lite.Binary(pickle.dumps(self.EmXvalues, protocol=pickle.HIGHEST_PROTOCOL)), lite.Binary(pickle.dumps(self.EmYvalues, protocol=pickle.HIGHEST_PROTOCOL)),))
                 db_handle.commit()
             elif self.basisClass == 'l':
                 db_cursor.execute("SELECT id from lamps ORDER BY id DESC LIMIT 1")

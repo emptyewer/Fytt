@@ -168,7 +168,7 @@ class Spectra():
             spec_scaled['x'].append(key)
             spec_scaled['y'].append(0.0)
 
-    def calculate_spectral_sum(self, offset_spin_value=0, offset_slider_value=0):
+    def calculate_spectral_sum(self, area=True, offset_spin_value=0, offset_slider_value=0):
         """
         Calculates the sum of acceptor, donor and background from the scaled basis spectra.
         The offset is calculated as a sum of offset_slider and offset_slider values.
@@ -191,14 +191,19 @@ class Spectra():
                                    bkg_interpolated[key] + \
                                    self.offset + \
                                    cy5_corrected_interpolated[key]
-        cy3_sum = 0.0
-        for key in list(self.reference.keys()):
-            cy3_sum += cy3_interpolated[key]
-        cy5_sum = 0.0
-        for key in list(self.reference.keys()):
-            cy5_sum += cy5_interpolated[key]
-        if (cy3_sum + cy5_sum) > 0:
-            self.fret = cy5_sum/(cy3_sum + cy5_sum)
+
+        if area == True:
+            cy3_sum = 0.0
+            for key in list(self.reference.keys()):
+                cy3_sum += cy3_interpolated[key]
+            cy5_sum = 0.0
+            for key in list(self.reference.keys()):
+                cy5_sum += cy5_interpolated[key]
+            if (cy3_sum + cy5_sum) > 0:
+                self.fret = cy5_sum/(cy3_sum + cy5_sum)
+        else:
+            self.fret = np.max(cy5_interpolated.values())/(np.max(cy3_interpolated.values()) +
+                                                           np.max(cy5_interpolated.values()))
 
     def calculate_residuals(self):
         """
