@@ -76,7 +76,7 @@ class BasisGui(QtGui.QDialog):
         self.acceptorPlotLine = pg.InfiniteLine()
         self.donorPlotLine = pg.InfiniteLine()
         self.mainWindow = ''
-        self.manualCorrectionCheckState()
+        # self.manualCorrectionCheckState()
 
     def setupBasisSets(self):
         self.model_donor = QtGui.QStandardItemModel()
@@ -541,13 +541,13 @@ class BasisGui(QtGui.QDialog):
         self.loadLayout = QtGui.QHBoxLayout(self.layoutWidget4)
         self.loadLayout.setMargin(0)
         self.loadLayout.setObjectName(_fromUtf8("loadLayout"))
-        self.correctionFactor_cbx = QtGui.QCheckBox(self.layoutWidget4)
+        self.correctionFactor_lbl = QtGui.QLabel(self.layoutWidget4)
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
-        self.correctionFactor_cbx.setFont(font)
-        self.correctionFactor_cbx.setObjectName(_fromUtf8("correctionFactor_cbx"))
-        self.loadLayout.addWidget(self.correctionFactor_cbx)
+        self.correctionFactor_lbl.setFont(font)
+        self.correctionFactor_lbl.setObjectName(_fromUtf8("correctionFactor_cbx"))
+        self.loadLayout.addWidget(self.correctionFactor_lbl)
         self.correctionFactor_spin = QtGui.QDoubleSpinBox(self.layoutWidget4)
         self.correctionFactor_spin.setMinimum(0.00)
         self.correctionFactor_spin.setMaximum(1.00)
@@ -699,7 +699,7 @@ class BasisGui(QtGui.QDialog):
         # self.donorEx_lbl.setText(_translate("BasisGui", "Donor Excitation", None))
         # self.acceptorEx_lbl.setText(_translate("BasisGui", "Acceptor Excitation", None))
         # self.slitWidth_lbl.setText(_translate("BasisGui", "Slit Width", None))
-        self.correctionFactor_cbx.setText(_translate("BasisGui", "Manual Correction Factor", None))
+        self.correctionFactor_lbl.setText(_translate("BasisGui", "Manual Correction Factor", None))
         # self.lamp_lbl.setText(_translate("BasisGui", "Choose Lamp Spectra", None))
         # self.lamp_box.setToolTip(_translate("BasisGui", "Select the lamp used for collecting fluorescence spectra", None))
         # self.addLamp.setText(_translate("BasisGui", "+", None))
@@ -734,25 +734,25 @@ class BasisGui(QtGui.QDialog):
         self.sendBasisSetsToMain_btn.clicked.connect(self.sendBasisSetsToMainWindow)
         self.setDirectExcitation_btn.clicked.connect(self.sendDirectExcitationtoMainWindow)
         # self.slitWidth_spin.valueChanged.connect(self.slitValueChanged)
-        self.correctionFactor_cbx.clicked.connect(self.manualCorrectionCheckState)
+        # self.correctionFactor_lbl.clicked.connect(self.manualCorrectionCheckState)
         self.correctionFactor_spin.valueChanged.connect(self.setManualCorrectionFactor)
         self.close_btn.clicked.connect(self.on_close_btn_clicked)
-        self.correctionFactor_cbx.setChecked(True)
-        self.correctionFactor_spin.setEnabled(False)
+        # self.correctionFactor_lbl.setChecked(True)
+        self.correctionFactor_spin.setEnabled(True)
 
     # def slitValueChanged(self):
     #     self.calculateLampIntRatio()
 
-    def manualCorrectionCheckState(self):
-        if self.correctionFactor_cbx.isChecked():
-            self.correctionFactor_spin.setEnabled(True)
-            self.changeStateForManual(False)
-            self.basis_sets.correctionFactor = self.correctionFactor_spin.value()
-            self.outputCorrectionFactor()
-        else:
-            self.correctionFactor_spin.setEnabled(False)
-            self.changeStateForManual(True)
-            self.calculateLampIntRatio()
+    # def manualCorrectionCheckState(self):
+    #     if self.correctionFactor_lbl.isChecked():
+    #         self.correctionFactor_spin.setEnabled(True)
+    #         self.changeStateForManual(False)
+    #         self.basis_sets.correctionFactor = self.correctionFactor_spin.value()
+    #         self.outputCorrectionFactor()
+    #     else:
+    #         self.correctionFactor_spin.setEnabled(False)
+    #         self.changeStateForManual(True)
+    #         self.calculateLampIntRatio()
 
     def setManualCorrectionFactor(self):
         self.basis_sets.correctionFactor = self.correctionFactor_spin.value()
