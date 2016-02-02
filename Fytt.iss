@@ -18,10 +18,10 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\Venky\Documents\Softwares\Fytt2\LICENSE
-OutputDir=C:\Users\Venky\Documents\Softwares\Fytt2\apps
+LicenseFile=C:\Users\Venky\Documents\GitHub\Fytt\LICENSE
+OutputDir=C:\Users\Venky\Documents\GitHub\Fytt\apps
 OutputBaseFilename=Fytt_2.6_x86_win32_setup
-SetupIconFile=C:\Users\Venky\Documents\Softwares\Fytt2\Icon.ico
+SetupIconFile=C:\Users\Venky\Documents\GitHub\Fytt\Icon.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -33,8 +33,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\Venky\Documents\Softwares\Fytt2\dist\Fytt.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Venky\Documents\Softwares\Fytt2\dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\Venky\Documents\GitHub\Fytt\dist\Fytt.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Venky\Documents\GitHub\Fytt\dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

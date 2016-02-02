@@ -21,6 +21,7 @@ Usage (Linux):
 pyinstaller -y -F fytt.py -n Fytt -i Icon.ico (use dev version 2.1-dev from https://github.com/pyinstaller/pyinstaller)
 """
 import os
+import glob
 import sys
 if sys.platform == 'darwin':
     from distutils.core import setup
@@ -69,7 +70,7 @@ def find_data_files(sources, targets, patterns):
     return sorted(ret.items())
 
 APP = ['fytt.py']
-DATA_FILES = [('images', ['fytt-icon.png']), ('db', ['fytt_db.sqlite3']), ('ui', ['ui/info.ui'])]
+DATA_FILES = [('images', ['fytt-icon.png']), ('', ['fytt_db.sqlite3']), ('ui', ['ui/info.ui'])]
 OPTIONS = {'argv_emulation': False,
            'iconfile' : 'Icon.icns',
            'plist': {'CFBundleGetInfoString': 'Fytt: Spectral decomposition by linear least squares fitting',
@@ -95,11 +96,21 @@ if sys.platform == 'darwin':
     author_email='venky.krishna@me.com',
   )
 elif sys.platform == 'win32':
-  setup(
-    windows=[{"script":'fytt.py',
+    origIsSystemDLL = py2exe.build_exe.isSystemDLL
+    def isSystemDLL(pathname):
+            if os.path.basename(pathname).lower() in ("msvcp71.dll", "dwmapi.dll", "'msvcp90.dll'"):
+                    return 0
+            return origIsSystemDLL(pathname)
+    py2exe.build_exe.isSystemDLL = isSystemDLL
+    setup(
+        windows=[{"script":'fytt.py',
                "icon_resources": [(1, "Icon.ico")],
                "dest_base":"Fytt"
             }],
-    options={"py2exe":{"includes" :["scipy.sparse.csgraph._validation", "scipy.special._ufuncs_cxx", "scipy.integrate"],
-                       "optimize": 2}}
-  )
+        data_files=DATA_FILES,
+        options={"py2exe": {"includes" :["scipy.sparse.csgraph._validation", "scipy.special._ufuncs_cxx", "scipy.integrate",
+                                     'scipy', 'scipy.integrate', 'scipy.special.*','scipy.linalg.*', "scipy.misc", "scipy.linalg.cython_blas"],
+                        "optimize": 2,
+                        "bundle_files": 1,
+                        "compressed": 2}}
+    )
