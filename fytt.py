@@ -29,8 +29,14 @@ import sys
 from PyQt4 import QtGui
 from mainwindow import Fytt_MainWindow
 
+app = QtGui.QApplication(sys.argv)
+
+def appExit():
+    app.quit()
+    sys.exit()
+
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+    app.aboutToQuit.connect(appExit)
     mainWin = Fytt_MainWindow()
     mainWin.show()
-    sys.exit(app.exec_())
+    app.exec_()

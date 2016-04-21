@@ -53,7 +53,7 @@ class BasisGui(QtGui.QDialog):
         QtGui.QMainWindow.__init__(self)
         self.setupUi(self)
         if sys.platform == 'darwin':
-            self.db_path = "db/fytt_db.sqlite3"
+            self.db_path = "fytt_db.sqlite3"
         elif sys.platform == 'linux2' or sys.platform == 'linux':
              self.db_path = "fytt_db.sqlite3"
         elif sys.platform == 'win32':
@@ -549,6 +549,7 @@ class BasisGui(QtGui.QDialog):
         self.correctionFactor_lbl.setObjectName(_fromUtf8("correctionFactor_cbx"))
         self.loadLayout.addWidget(self.correctionFactor_lbl)
         self.correctionFactor_spin = QtGui.QDoubleSpinBox(self.layoutWidget4)
+        self.correctionFactor_spin.setDecimals(3)
         self.correctionFactor_spin.setMinimum(0.000)
         self.correctionFactor_spin.setMaximum(1.000)
         self.correctionFactor_spin.setSingleStep(0.001)
@@ -795,8 +796,13 @@ class BasisGui(QtGui.QDialog):
                                     )
         self.proxy_background.setFilterRegExp(search)
 
+def appExit():
+    app.quit()
+    sys.exit()
+
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
+    app.aboutToQuit.connect(appExit)
     mainWin = BasisGui()
     mainWin.show()
-    sys.exit(app.exec_())
+    app.exec_()

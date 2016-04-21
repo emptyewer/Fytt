@@ -75,10 +75,10 @@ OPTIONS = {'argv_emulation': False,
            'iconfile' : 'Icon.icns',
            'plist': {'CFBundleGetInfoString': 'Fytt: Spectral decomposition by linear least squares fitting',
                      'CFBundleIdentifier': 'edu.uiowa.vkrishnamani.fytt',
-                     'CFBundleShortVersionString': '2.6',
+                     'CFBundleShortVersionString': '2.6.1',
                      'CFBundleName': 'Fytt',
-                     'CFBundleVersion': '26',
-                     'NSHumanReadableCopyright': '(c) 2015 Venkatramanan Krishnamani'},
+                     'CFBundleVersion': '261',
+                     'NSHumanReadableCopyright': '(c) 2016 Venkatramanan Krishnamani'},
             'includes': ['sip', 'PyQt4', 'PyQt4.QtCore', 'PyQt4.QtGui', 'numpy', 'scipy', 'pyqtgraph', 'sys', 're', 'threading'],
            }
 

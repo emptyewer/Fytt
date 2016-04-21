@@ -2,8 +2,16 @@ import os
 import sys
 from PyQt4 import QtCore, QtGui, uic
 
+
 app = QtGui.QApplication(sys.argv)
+
+def appExit():
+    app.quit()
+    sys.exit()
+
+app.aboutToQuit.connect(appExit)
 form_class, base_class = uic.loadUiType(os.path.join(os.path.curdir, 'ui', 'info.ui'))
+
 
 class Info_Dialog(QtGui.QDialog, form_class):
     def __init__(self, *args):
