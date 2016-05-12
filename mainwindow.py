@@ -167,7 +167,9 @@ class Fytt_MainWindow(QtGui.QMainWindow):
 
     def plot_residual(self):
         # queue = Queue.Queue()
-        self.err_lbl.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">%0.0f</span></p></body></html>" % self.spectra.error,  None))
+        self.err_lbl.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                      "font-size:16pt; "
+                                                      "font-weight:600;\">%0.000f</span></p></body></html>" % self.spectra.error,  None))
         res_color = pg.mkPen({'color': '00DA3C', 'width': 2})
         # t = threading.Thread(target=self.plot_graph_dictionary,
         #                     name='dualplot',
@@ -1017,7 +1019,7 @@ class Fytt_MainWindow(QtGui.QMainWindow):
         self.acceptor_shift_cbx.setText(_translate("MainWindow", "Acceptor Shift (Fixed)", None))
         self.label_5.setText(_translate("MainWindow", "FRET Index", None))
         self.fret_lbl.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.0</span></p></body></html>", None))
-        self.label_7.setText(_translate("MainWindow", "Mean Square Error", None))
+        self.label_7.setText(_translate("MainWindow", "Reduced 𝛘2 Error", None))
         self.err_lbl.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.0</span></p></body></html>", None))
         self.autofit_btn.setText(_translate("MainWindow", "Fytt", None))
         self.actionAbout.setText(_translate("MainWindow", "About", None))
