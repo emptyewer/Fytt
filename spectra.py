@@ -217,8 +217,8 @@ class Spectra():
             a = self.reference[key]
             b = self.calculated[key] if key in self.calculated else 0.0
             self.residuals[key] = a - b
-            self.error += (a - b) ** 2
-        self.error = self.error/np.sum(np.array(self.reference.values()))
+            self.error += (a - b) ** 2/a
+        self.error = self.error/(len(self.reference.values()) -  5)
 
     def return_yvalue(self, dictionary, x):
         return dictionary['y'][dictionary['x'].index(x)]
