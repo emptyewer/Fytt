@@ -1,6 +1,9 @@
 ![alt tag](https://raw.githubusercontent.com/emptyewer/Fytt/master/fytt-icon.png)
 
 # Fytt2
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/416a22444737473bba6515724c88a54a)](https://www.codacy.com/app/emptyewer/Fytt?utm_source=github.com&utm_medium=referral&utm_content=emptyewer/Fytt&utm_campaign=badger)
+
 Fit spectra by linear combination of its component spectra.
 
 
